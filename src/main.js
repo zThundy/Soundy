@@ -25,6 +25,8 @@ import {
   faBullhorn,
   faPencil,
   faPaperclip,
+  faFloppyDisk,
+  faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -51,7 +53,9 @@ library.add(
   faTwitch,
   faBullhorn,
   faPencil,
-  faPaperclip
+  faPaperclip,
+  faFloppyDisk,
+  faSpinner
 );
 
 // This is cool, but too heavy for the user.

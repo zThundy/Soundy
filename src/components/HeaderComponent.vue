@@ -17,7 +17,7 @@
 
 <script>
 export default {
-  name: "header",
+  name: "dashboardHeader",
   setup() {
     return {
       profileName: "zThundy",
