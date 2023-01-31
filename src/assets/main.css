@@ -1,0 +1,24 @@
+@import './base.css';
+
+body {
+  display: flex;
+  place-items: center;
+
+  background-image: url("/assets/background.gif");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-blend-mode: darken;
+}
+
+#app {
+  margin: 0 auto;
+  font-weight: normal;
+  width: 100vw;
+  height: 100vh;
+  block-size: auto;
+
+  /* height: 75vh;
+  width: 35vw;
+  min-width: 672px;
+  min-height: 702px; */
+}
