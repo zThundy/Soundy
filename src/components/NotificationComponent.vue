@@ -14,7 +14,7 @@
       id="icon"
       icon="fa-solid fa-check"
     />
-    <span>{{ currentNotif.message }}</span>
+    <span class="notif-container-text">{{ currentNotif.message }}</span>
   </div>
 </template>
 
@@ -102,11 +102,12 @@ export default {
 }
 
 #icon {
+  padding: 5px;
   /* top: 5px; */
   font-size: 1.5em;
 }
 
-span {
+.notif-container-text {
   width: 90%;
   margin-left: 10px;
 }
