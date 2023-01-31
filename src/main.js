@@ -33,8 +33,6 @@ import {
   faTwitter,
 } from "@fortawesome/free-brands-svg-icons";
 
-console.log(faGithub)
-
 library.add(
   faTriangleExclamation,
   faCheck,
