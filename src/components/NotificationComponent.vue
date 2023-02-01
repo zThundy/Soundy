@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="currentNotif.type && currentNotif.message"
-    class="notif-container"
+    class="notif-container show"
     :class="currentNotif.type"
   >
     <font-awesome-icon
@@ -52,10 +52,16 @@ export default {
         this.currentNotif = {};
         return;
       }
-      this.currentNotif = this.notif.pop();
+      this.currentNotif = this.notif.shift();
       return setTimeout(() => {
-        this.currentNotif = {};
-        return setTimeout(() => this.cycleNotif(), 10);
+        // remove class "show" from notification container
+        const ref = document.querySelector(".notif-container");
+        ref.classList.remove("show");
+        ref.classList.add("hide");
+        return setTimeout(() => {
+          this.currentNotif = {};
+          setTimeout(() => this.cycleNotif(), 100);
+        }, 100);
       }, this.currentNotif.time);
     },
   },
@@ -85,12 +91,19 @@ export default {
   z-index: 1;
   border-radius: 10px;
   justify-content: center;
+}
 
-  animation: popFromRight 0.1s ease-in-out;
+.show {
+  animation: shiftLeft 0.1s ease-in-out;
   animation-fill-mode: forwards;
 }
 
-@keyframes popFromRight {
+.hide {
+  animation: shiftRight 0.1s ease-in-out;
+  animation-fill-mode: forwards;
+}
+
+@keyframes shiftLeft {
   0% {
     right: -350px;
     height: 0;
@@ -98,6 +111,17 @@ export default {
   100% {
     right: 10px;
     height: auto;
+  }
+}
+
+@keyframes shiftRight {
+  0% {
+    right: 10px;
+    height: auto;
+  }
+  100% {
+    right: -350px;
+    height: 0;
   }
 }
 
