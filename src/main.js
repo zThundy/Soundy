@@ -27,6 +27,11 @@ import {
   faPaperclip,
   faFloppyDisk,
   faSpinner,
+  faTrash,
+  faSadCry,
+  faFaceFrown,
+  faFaceSmile,
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -55,7 +60,12 @@ library.add(
   faPencil,
   faPaperclip,
   faFloppyDisk,
-  faSpinner
+  faSpinner,
+  faTrash,
+  faSadCry,
+  faFaceFrown,
+  faFaceSmile,
+  faPlus
 );
 
 // This is cool, but too heavy for the user.

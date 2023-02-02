@@ -1,7 +1,7 @@
 <template>
   <div class="page-container">
     <div class="bg" v-if="sounds">
-      <div class="sounds-list">
+      <div class="sounds-list" v-if="sounds.length > 0">
         <div
           v-for="sound of sounds"
           v-bind:key="sound.id"
@@ -14,7 +14,7 @@
         </div>
       </div>
       <div class="sounds-info">
-        <div v-if="selectedSound" class="sound-infoes-container">
+        <div v-if="selectedSound" class="sound-infoes-container" style="width: 95%;">
           <div class="input-container">
             <label class="label">Sound Name:</label>
             <input v-model="selectedSound.name" maxlength="40" placeholder="Type the name of your sound file (max 40)"/>
@@ -22,18 +22,31 @@
             <input v-model="selectedSound.description" maxlength="80" placeholder="Type the description of your sound file (max 80)"/>
           </div>
 
-          <label class="label">Volume:</label>
-          <div class="slidecontainer">
-            <input v-model="selectedSound.volume" type="range" min="1" max="100" class="slider">
-            <span style="width: 50px; text-align: center;">{{ (selectedSound.volume) }}%</span>
+          <div class="slider-container">
+            <label class="label">Volume:</label>
+            <div class="slidecontainer">
+              <input v-model="selectedSound.volume" type="range" min="1" max="100" class="slider">
+              <span style="width: 50px; text-align: center;">{{ (selectedSound.volume) }}%</span>
+            </div>
           </div>
 
-          <div class="save-button" @click="saveSound(selectedSound)">
-            <span class="save-button-text"><font-awesome-icon class="icon" icon="floppy-disk" /> Save</span>
+          <div class="buttons-container">
+            <div class="save-button" @click="saveSound(selectedSound)">
+              <span><font-awesome-icon class="icon" icon="floppy-disk" /> Save</span>
+            </div>
+            <div class="delete-button" @click="deleteSound(selectedSound)">
+              <span><font-awesome-icon class="icon" icon="trash" /> Delete</span>
+            </div>
           </div>
         </div>
-        <div v-else class="sound-infoes-container" style="margin: auto;">
-          <div style="text-align: center;">Select a sound</div>
+        <div v-else class="sound-infoes-container" style="margin: auto; width: 65%;">
+          <div style="text-align: center;" v-if="sounds.length > 0">Select a sound</div>
+          <div class="no-sounds-container" v-else>
+            <span>No sounds to show <font-awesome-icon class="icon" icon="face-frown" /></span>
+            <div class="upload-button" @click="activateUploader()">
+              <span><font-awesome-icon class="icon" icon="plus" /> Upload one</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -62,38 +75,38 @@ export default {
             volume: 30,
             isPlaying: false,
           },
-          {
-            id: "67a92512-1237-4dd3-a63c-3d7a6c0d8f40",
-            path: "C:/Users/username/Music/sound2.mp3",
-            name: "Emotional damage",
-            description: "This is a description for the sound",
-            volume: 70,
-            isPlaying: false,
-          },
-          {
-            id: "850a518f-9e6e-4552-9b49-afd80b687839",
-            path: "C:/Users/username/Music/sound3.mp3",
-            name: "Very long name for a sound to add to this website, and still adding shit to see how the container behaves",
-            description: "This is a description for the sound",
-            volume: 95,
-            isPlaying: false,
-          },
-          {
-            id: "7ff7233d-7c0a-4f5f-ae93-fca9a2f75d76",
-            path: "C:/Users/username/Music/sound3.mp3",
-            name: "Very long name for a sound to add to this website, and still adding shit to see how the container behaves",
-            description: "This is a description for the sound",
-            volume: 10,
-            isPlaying: false,
-          },
-          {
-            id: "2a181a1f-ad47-4f45-8611-e05cffdb0b51",
-            path: "C:/Users/username/Music/sound3.mp3",
-            name: "Very long name for a sound to add to this website, and still adding shit to see how the container behaves",
-            description: "This is a description for the sound",
-            volume: 99,
-            isPlaying: false,
-          },
+          // {
+          //   id: "67a92512-1237-4dd3-a63c-3d7a6c0d8f40",
+          //   path: "C:/Users/username/Music/sound2.mp3",
+          //   name: "Emotional damage",
+          //   description: "This is a description for the sound",
+          //   volume: 70,
+          //   isPlaying: false,
+          // },
+          // {
+          //   id: "850a518f-9e6e-4552-9b49-afd80b687839",
+          //   path: "C:/Users/username/Music/sound3.mp3",
+          //   name: "Very long name for a sound to add to this website, and still adding shit to see how the container behaves",
+          //   description: "This is a description for the sound",
+          //   volume: 95,
+          //   isPlaying: false,
+          // },
+          // {
+          //   id: "7ff7233d-7c0a-4f5f-ae93-fca9a2f75d76",
+          //   path: "C:/Users/username/Music/sound3.mp3",
+          //   name: "Very long name for a sound to add to this website, and still adding shit to see how the container behaves",
+          //   description: "This is a description for the sound",
+          //   volume: 10,
+          //   isPlaying: false,
+          // },
+          // {
+          //   id: "2a181a1f-ad47-4f45-8611-e05cffdb0b51",
+          //   path: "C:/Users/username/Music/sound3.mp3",
+          //   name: "Very long name for a sound to add to this website, and still adding shit to see how the container behaves",
+          //   description: "This is a description for the sound",
+          //   volume: 99,
+          //   isPlaying: false,
+          // },
         ],
         selectedSound: null,
       };
@@ -127,6 +140,23 @@ export default {
         message: 'Sound "' + sound.name + '" saved!',
         type: "success",
       });
+    },
+    deleteSound(sound) {
+      for (var i in this.sounds) {
+        if (this.sounds[i].id === sound.id) {
+          this.sounds.splice(i, 1);
+          break;
+        }
+      }
+      this.selectedSound = null;
+      // TODO: Delete sound
+      emitter.emit("notif", {
+        message: 'Sound "' + sound.name + '" deleted!',
+        type: "success",
+      });
+    },
+    activateUploader() {
+      emitter.emit("toggle-uploader", true);
     },
   },
 
@@ -185,9 +215,9 @@ export default {
   display: flex;
   flex-direction: column;
   height: 250px;
-  width: 100%;
+  width: 92%;
+  margin: auto;
   margin-top: 25px;
-  margin-right: auto;
   border-radius: 10px;
 }
 
@@ -199,7 +229,7 @@ export default {
   background-color: rgb(70, 70, 70);
   height: auto;
   padding: 15px;
-  width: 95%;
+  width: 100%;
   border: none;
   border-radius: 15px;
   color: white;
@@ -245,8 +275,9 @@ export default {
   width: 100%;
   height: 100%;
   margin-left: auto;
-  background-color: #333333;
   margin-right: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
   border-radius: 10px;
 }
 
@@ -275,8 +306,8 @@ export default {
   /* margin-left: 10px; */
   transition: all 0.1s ease-in-out;
   border-radius: 10px;
+  background-color: #333333;
   padding: 10px;
-  width: 95%;
 }
 
 .sound:hover {
@@ -298,6 +329,61 @@ export default {
   background-color: rgba(87, 87, 87, 1);
 }
 
+.buttons-container {
+  display: flex;
+  flex-direction: row;
+  height: auto;
+  width: 92%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 30px;
+  border-radius: 10px;
+}
+
+.upload-button {
+  user-select: none;
+  transition: all 0.1s ease-in-out;
+  border-radius: 10px;
+  padding: 10px 15px 10px 10px;
+  /* margin-top: 10px; */
+  /* margin-bottom: 10px; */
+  background-color: rgb(180, 0, 190);
+  cursor: pointer;
+  width: fit-content;
+  color: white;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+}
+
+.upload-button:hover {
+  transition: all 0.1s ease-in-out;
+  background-color: rgb(176, 49, 185);
+  color: white;
+}
+
+.delete-button {
+  user-select: none;
+  transition: all 0.1s ease-in-out;
+  border-radius: 10px;
+  padding: 10px 15px 10px 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: rgb(151, 0, 0);
+  cursor: pointer;
+  width: fit-content;
+  color: white;
+  text-align: center;
+  margin-left: 3%;
+}
+
+.delete-button:hover {
+  transition: all 0.1s ease-in-out;
+  background-color: rgb(190, 0, 0);
+  color: white;
+}
+
 .save-button {
   user-select: none;
   transition: all 0.1s ease-in-out;
@@ -316,6 +402,15 @@ export default {
   transition: all 0.1s ease-in-out;
   background-color: rgb(176, 49, 185);
   color: white;
+}
+
+.slider-container {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  width: 92%;
+  margin: auto;
+  border-radius: 10px;
 }
 
 .slidecontainer {
@@ -370,5 +465,16 @@ export default {
 
 .slider::-moz-range-thumb:hover {
   background: rgb(176, 49, 185);
+}
+
+.no-sounds-container {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  margin: auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 50%;
+  color: white;
 }
 </style>

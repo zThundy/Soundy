@@ -1,17 +1,3 @@
-<script>
-// import { RouterLink, RouterView } from "vue-router";
-import SideMenu from "../../components/SideMenu.vue";
-import HeaderComponent from "../../components/HeaderComponent.vue";
-
-export default {
-  name: "HomePage",
-  components: { SideMenu, HeaderComponent },
-  setup() {
-    return {};
-  },
-};
-</script>
-
 <template>
   <!-- table to contain sidebar and content of page -->
   
@@ -22,8 +8,51 @@ export default {
       <HeaderComponent />
       <RouterView class="router-view" />
     </div>
+
+    <div v-if="uploaderActive" class="uploader-container">
+      <div class="file-uploader">
+        <FileUploader />
+      </div>
+    </div>
   </div>
 </template>
+
+<script>
+// import { RouterLink, RouterView } from "vue-router";
+import emitter from "tiny-emitter/instance";
+import SideMenu from "../../components/SideMenu.vue";
+import HeaderComponent from "../../components/HeaderComponent.vue";
+import FileUploader from "../../components/FileUploader.vue";
+
+export default {
+  name: "HomePage",
+  components: { SideMenu, HeaderComponent, FileUploader },
+  data() {
+    return {
+      uploaderActive: false,
+    };
+  },
+
+  methods: {
+    // disableUploader() {
+    //   console.log("disableUploader")
+    //   if (this.uploaderActive) {
+    //     this.uploaderActive = false;
+    //   }
+    // },
+  },
+
+  mounted() {
+    emitter.on("toggle-uploader", (bool) => {
+      if (!bool) {
+        this.uploaderActive = !this.uploaderActive;
+      } else {
+        this.uploaderActive = Boolean(bool) || false;
+      }
+    });
+  },
+};
+</script>
 
 <style scoped>
 .dashboard-container {
@@ -59,5 +88,44 @@ export default {
   flex-direction: column;
   height: 100%;
   width: 100%;
+}
+
+.uploader-container {
+  position: absolute;
+  /* display: flex; */
+  /* flex-direction: column; */
+  /* text-align: center; */
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+  width: 100%;
+  height: 100%;
+  /* color: white; */
+  /* background-color: white; */
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 1;
+}
+
+.file-uploader {
+  border-radius: 20px;
+
+  background-color: rgb(107, 107, 107);
+  margin: auto;
+  width: 50%;
+  height: 50%;
+  opacity: 0;
+  animation: showUploader 0.1s ease-in-out;
+  animation-fill-mode: forwards;
+  z-index: 2;
+}
+
+@keyframes showUploader {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 </style>
