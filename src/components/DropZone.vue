@@ -1,7 +1,7 @@
 <template>
-	<div :data-active="active" @dragenter.prevent="setActive" @dragover.prevent="setActive" @dragleave.prevent="setInactive" @drop.prevent="onDrop">
-		<slot :dropZoneActive="active"></slot>
-	</div>
+  <div :data-active="active" @dragenter.prevent="setActive" @dragover.prevent="setActive" @dragleave.prevent="setInactive" @drop.prevent="onDrop">
+    <slot :dropZoneActive="active"></slot>
+  </div>
 </template>
 
 <script setup>
@@ -10,30 +10,30 @@ const emit = defineEmits(['files-dropped'])
 let active = ref(false)
 let inActiveTimeout = null
 function setActive() {
-	active.value = true
-	clearTimeout(inActiveTimeout)
+  active.value = true
+  clearTimeout(inActiveTimeout)
 }
 function setInactive() {
-	inActiveTimeout = setTimeout(() => {
-		active.value = false
-	}, 50)
+  inActiveTimeout = setTimeout(() => {
+    active.value = false
+  }, 50)
 }
 function onDrop(e) {
-	setInactive()
-	emit('files-dropped', [...e.dataTransfer.files])
+  setInactive()
+  emit('files-dropped', [...e.dataTransfer.files])
 }
 function preventDefaults(e) {
-	e.preventDefault()
+  e.preventDefault()
 }
 const events = ['dragenter', 'dragover', 'dragleave', 'drop']
 onMounted(() => {
-	events.forEach((eventName) => {
-		document.body.addEventListener(eventName, preventDefaults)
-	})
+  events.forEach((eventName) => {
+    document.body.addEventListener(eventName, preventDefaults)
+  })
 })
 onUnmounted(() => {
-	events.forEach((eventName) => {
-		document.body.removeEventListener(eventName, preventDefaults)
-	})
+  events.forEach((eventName) => {
+    document.body.removeEventListener(eventName, preventDefaults)
+  })
 })
 </script>

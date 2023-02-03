@@ -19,40 +19,26 @@
       </label>
       <ul class="image-list" v-show="file.name">
         <div class="file-ready-container">
-          <span>{{ file.name }}</span>
-          <span>{{ computeStatus() }}</span>
+          <span>{{ computeStatus(file.status) }}</span>
         </div>
       </ul>
     </DropZone>
 
     <div class="buttons-container">
-      <button @click.prevent="uploadFile(file)" class="upload-button">Upload</button>
-      <button @click.prevent="cancel()" class="upload-button">Cancel</button>
+      <button @click.prevent="uploadClick" class="upload-button">Upload</button>
+      <button @click.prevent="cancel" class="upload-button">Cancel</button>
     </div>
   </div>
 </template>
 
-<script setup>
+<script>
 import emitter from "tiny-emitter/instance";
 // Components
 import DropZone from './DropZone.vue'
-import FilePreview from './FilePreview.vue'
 // File Management
 import useFileList from '../compositions/file-list'
 // Uploader
 import createUploader from '../compositions/file-uploader'
-
-function computeStatus() {
-  if (file.status === 'uploading') {
-    return `Uploading...`
-  } else if (file.status === 'uploaded') {
-    return 'Uploaded'
-  } else if (file.status === 'error') {
-    return 'Error'
-  } else if (file.status === 'ready') {
-    return 'Ready to upload'
-  }
-}
 
 const { file, addFile, removeFile } = useFileList()
 function onInputChange(e) {
@@ -66,7 +52,48 @@ function cancel() {
   removeFile();
 }
 
-const { uploadFile } = createUploader('https://discord.com/api/webhooks/1070748601912918017/Vk5y27xwYLr9Uy1XsdOWp5vvyBo-N-yjvxqjiVKF5t5J_j8ianoyUmUGJ6PAEfK_-rwr')
+const { uploadFile } = createUploader('https://discord.com/api/webhooks/1071101423242182696/VhL9eFJ_RiOS293nnW2MUjj0IYwPo42YKRY9bjFkwr8lx4mjLx2HUpgQsN1dTPqvmtTb')
+
+export default {
+  components: { DropZone },
+  setup() {
+    return {
+      file,
+      addFile,
+      removeFile,
+      onInputChange,
+      cancel,
+      uploadFile
+    }
+  },
+
+  methods: {
+    computeStatus(status) {
+      switch (status) {
+        case 'loading':
+          return 'Uploading...'
+        case 'success':
+          setTimeout(() => this.cancel(), 1000);
+          return 'Uploaded!'
+        case 'error':
+          return 'Error'
+        default:
+          return 'Ready'
+      }
+    },
+    computeName(name) {
+      if (name) {
+        name = name.split('.')[0];
+        if (name.length > 50) name = name.slice(0, 50) + '...'
+      }
+      return name
+    },
+    uploadClick(e) {
+      e.srcElement.disabled = true;
+      this.uploadFile(this.file);
+    }
+  }
+}
 </script>
 
 <style scoped lang="scss">
@@ -157,6 +184,20 @@ const { uploadFile } = createUploader('https://discord.com/api/webhooks/10707486
   transition: all 0.2s ease-in-out;
 }
 
+.upload-button:disabled {
+  background: linear-gradient(
+    150deg,
+    rgb(73, 55, 75) 0%,
+    rgb(56, 31, 56) 20%,
+    rgb(32, 5, 29) 100%
+  );
+  background-size: 400% 400%;
+  background-position: 0% 50%;
+  color: gray;
+  transition: all 0.2s ease-in-out;
+  cursor: not-allowed;
+}
+
 .buttons-container {
   display: flex;
   flex-direction: row;
@@ -175,5 +216,11 @@ const { uploadFile } = createUploader('https://discord.com/api/webhooks/10707486
   margin: 10px;
   width: 100%;
   height: 100%;
+}
+
+.file-ready-container span {
+  width: 70%;
+  font-weight: bold;
+  font-size: 1.2rem;
 }
 </style>
