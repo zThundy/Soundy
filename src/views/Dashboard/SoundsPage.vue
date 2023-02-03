@@ -20,6 +20,8 @@
             <input v-model="selectedSound.name" maxlength="40" placeholder="Type the name of your sound file (max 40)"/>
             <label class="label">Sound Description:</label>
             <input v-model="selectedSound.description" maxlength="80" placeholder="Type the description of your sound file (max 80)"/>
+            <label class="label">Points needed:</label>
+            <input type="number" v-model="selectedSound.points" maxlength="80" placeholder="Type the description of your sound file (max 80)"/>
           </div>
 
           <div class="slider-container">
@@ -73,40 +75,45 @@ export default {
             name: "Meme sound number one",
             description: "This is a description for the sound",
             volume: 30,
+            points: 80,
             isPlaying: false,
           },
-          // {
-          //   id: "67a92512-1237-4dd3-a63c-3d7a6c0d8f40",
-          //   path: "C:/Users/username/Music/sound2.mp3",
-          //   name: "Emotional damage",
-          //   description: "This is a description for the sound",
-          //   volume: 70,
-          //   isPlaying: false,
-          // },
-          // {
-          //   id: "850a518f-9e6e-4552-9b49-afd80b687839",
-          //   path: "C:/Users/username/Music/sound3.mp3",
-          //   name: "Very long name for a sound to add to this website, and still adding shit to see how the container behaves",
-          //   description: "This is a description for the sound",
-          //   volume: 95,
-          //   isPlaying: false,
-          // },
-          // {
-          //   id: "7ff7233d-7c0a-4f5f-ae93-fca9a2f75d76",
-          //   path: "C:/Users/username/Music/sound3.mp3",
-          //   name: "Very long name for a sound to add to this website, and still adding shit to see how the container behaves",
-          //   description: "This is a description for the sound",
-          //   volume: 10,
-          //   isPlaying: false,
-          // },
-          // {
-          //   id: "2a181a1f-ad47-4f45-8611-e05cffdb0b51",
-          //   path: "C:/Users/username/Music/sound3.mp3",
-          //   name: "Very long name for a sound to add to this website, and still adding shit to see how the container behaves",
-          //   description: "This is a description for the sound",
-          //   volume: 99,
-          //   isPlaying: false,
-          // },
+          {
+            id: "67a92512-1237-4dd3-a63c-3d7a6c0d8f40",
+            path: "C:/Users/username/Music/sound2.mp3",
+            name: "Emotional damage",
+            description: "This is a description for the sound",
+            volume: 70,
+            points: 100,
+            isPlaying: false,
+          },
+          {
+            id: "850a518f-9e6e-4552-9b49-afd80b687839",
+            path: "C:/Users/username/Music/sound3.mp3",
+            name: "Very long name for a sound to add to this website, and still adding shit to see how the container behaves",
+            description: "This is a description for the sound",
+            volume: 95,
+            points: 200,
+            isPlaying: false,
+          },
+          {
+            id: "7ff7233d-7c0a-4f5f-ae93-fca9a2f75d76",
+            path: "C:/Users/username/Music/sound3.mp3",
+            name: "Very long name for a sound to add to this website, and still adding shit to see how the container behaves",
+            description: "This is a description for the sound",
+            volume: 10,
+            points: 20,
+            isPlaying: false,
+          },
+          {
+            id: "2a181a1f-ad47-4f45-8611-e05cffdb0b51",
+            path: "C:/Users/username/Music/sound3.mp3",
+            name: "Very long name for a sound to add to this website, and still adding shit to see how the container behaves",
+            description: "This is a description for the sound",
+            volume: 99,
+            points: 90,
+            isPlaying: false,
+          },
         ],
         selectedSound: null,
       };
@@ -410,6 +417,7 @@ export default {
   height: auto;
   width: 92%;
   margin: auto;
+  margin-top: 80px;
   border-radius: 10px;
 }
 
