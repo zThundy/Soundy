@@ -109,11 +109,10 @@ export default {
 
 .file-uploader {
   border-radius: 20px;
-
   background-color: rgb(107, 107, 107);
   margin: auto;
   width: 50%;
-  height: 50%;
+  height: auto;
   opacity: 0;
   animation: showUploader 0.1s ease-in-out;
   animation-fill-mode: forwards;

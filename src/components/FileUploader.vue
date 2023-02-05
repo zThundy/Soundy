@@ -1,5 +1,9 @@
 <template>
   <div class="uploader">
+    <div class="close-button-container">
+      <button @click.prevent="cancel" class="close-button"><font-awesome-icon icon="xmark"/></button>
+    </div>
+
     <DropZone class="drop-area" @files-dropped="addFile" #default="{ dropZoneActive }">
       <label for="file-input" class="file-input-label">
         <span v-if="dropZoneActive">
@@ -89,6 +93,13 @@ export default {
       return name
     },
     uploadClick(e) {
+      if (!file.value.name) {
+        return emitter.emit("notif", {
+          message: 'Please select a file first',
+          type: "error",
+          time: 1500,
+        });
+      } 
       e.srcElement.disabled = true;
       this.uploadFile(this.file);
     }
@@ -222,5 +233,29 @@ export default {
   width: 70%;
   font-weight: bold;
   font-size: 1.2rem;
+}
+
+.close-button-container {
+  width: 10%;
+  margin-left: auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  position: relative;
+}
+
+.close-button {
+  transition: all .1s ease-in-out;
+  font-size: 1.5rem;
+  color: rgb(48, 48, 48);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.close-button:hover {
+  transition: all .1s ease-in-out;
+  color: rgb(200, 0, 0);
+  rotate: 360deg;
 }
 </style>

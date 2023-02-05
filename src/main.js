@@ -32,6 +32,7 @@ import {
   faFaceFrown,
   faFaceSmile,
   faPlus,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -65,7 +66,8 @@ library.add(
   faSadCry,
   faFaceFrown,
   faFaceSmile,
-  faPlus
+  faPlus,
+  faXmark
 );
 
 // This is cool, but too heavy for the user.
