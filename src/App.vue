@@ -22,7 +22,7 @@ export default {
 <style scoped>
 .app-container {
   height: 100vh;
-  width: 100vw;
+  width: 100%;
   block-size: auto;
 }
 </style>
