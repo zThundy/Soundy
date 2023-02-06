@@ -62,34 +62,34 @@ export default {
   name: "SideMenu",
   data() {
     // const router = useRouter()
-    const route = useRoute();
+    const page = useRoute();
+
+    const routes = this.$router.options.routes
+    var elementsTop = [];
+    for (const route of routes) {
+      if (route.name === "dashboard") {
+        for (const children of route.children) {
+          elementsTop.push({
+            name: children.name,
+            path: "/dashboard/" + page.params.id + "/" + children.path,
+            text: (children.name.charAt(0).toUpperCase() + children.name.slice(1)).replace(/([-])/g, " ").trim(),
+            icon: children.icon,
+          })
+        }
+      }
+    }
 
     return {
       collapsed: false,
-      elementsTop: [
-        {
-          icon: "home",
-          text: "Sounds",
-          path: "/dashboard/" + route.params.id,
-          position: "top",
-        },
-        {
-          icon: "cog",
-          text: "Settings",
-          path: "/dashboard/" + route.params.id + "/settings",
-          position: "top",
-        },
-      ],
+      elementsTop,
       elementsBottom: [
         {
           icon: "arrow-left",
           text: "Collapse",
-          position: "bottom",
         },
         {
           icon: "right-from-bracket",
           text: "Log out",
-          position: "bottom",
           color: "rgb(255, 0, 0)",
         },
       ],
@@ -127,7 +127,8 @@ export default {
     changeSelected() {
       // change selected element
       for (var i in this.elementsTop) {
-        if (this.$route.name === this.elementsTop[i].text.toLowerCase()) {
+        // trim and replace all spaces with dashes
+        if (this.$route.name === this.elementsTop[i].text.trim().replace(/\s+/g, "-").toLowerCase()) {
           this.elementsTop[i].selected = true;
         } else {
           this.elementsTop[i].selected = false;

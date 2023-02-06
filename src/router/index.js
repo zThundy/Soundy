@@ -29,19 +29,28 @@ const router = createRouter({
       component: () => import("../views/ForgotView.vue"),
     },
     {
+      name: "dashboard",
       path: "/dashboard/:id",
       component: () => import("../views/Dashboard/HomePage.vue"),
       children: [
         {
+          icon: "home",
+          name: "sounds",
+          path: "",
+          component: () => import("../views/Dashboard/SoundsPage.vue"),
+        },
+        {
+          icon: "cog",
           name: "settings",
           path: "settings",
           component: () => import("../views/Dashboard/UserSettings.vue"),
         },
         {
-          name: "sounds",
-          path: "",
-          component: () => import("../views/Dashboard/SoundsPage.vue"),
-        },
+          icon: "window-maximize",
+          name: "alert-settings",
+          path: "alert-settings",
+          component: () => import("../views/Dashboard/AlertSettings.vue"),
+        }
       ],
     },
   ],

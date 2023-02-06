@@ -38,6 +38,7 @@ import {
   faCircleMinus,
   faCircleXmark,
   faRotate,
+  faWindowMaximize,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -77,7 +78,8 @@ library.add(
   faCircleCheck,
   faCircleMinus,
   faCircleXmark,
-  faRotate
+  faRotate,
+  faWindowMaximize
 );
 
 // This is cool, but too heavy for the user.
