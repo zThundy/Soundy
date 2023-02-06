@@ -7,7 +7,7 @@
     </div>
     <div class="profile-container">
       <div class="multitext-container">
-        <span class="profile-name">{{ profileName }}</span>
+        <span class="profile-name">{{ profile.name }}</span>
         <div class="profile-edit"><font-awesome-icon class="icon" icon="pencil" /> Account</div>
       </div>
       <img src="/assets/zThundy.png" />
@@ -18,15 +18,16 @@
 <script>
 export default {
   name: "dashboardHeader",
-  setup() {
+  inject: ["$profileAPI"],
+  data() {
     return {
-      profileName: "zThundy",
+      profile: this.$profileAPI.getCachedProfile(),
     };
   },
 }
 </script>
 
-<style scoped>
+<style>
 .container {
   display: flex;
   flex-direction: row;

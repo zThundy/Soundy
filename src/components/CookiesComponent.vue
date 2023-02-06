@@ -1,6 +1,22 @@
-<script>
-// import emitter from "tiny-emitter/instance";
+<template>
+  <div class="container" :class="accepted ? 'slide-down' : 'slide-up'">
+    <font-awesome-icon icon="fa-solid fa-cookie-bite" class="icon" />
 
+    <div class="text-container">
+      This website uses cookies to ensure you get the best experience on our
+      website. Please accept our cookie policy to continue using our website. To
+      learn more about our cookie policy, please visit this
+      <router-link to="/cookies">page</router-link>.
+    </div>
+
+    <div class="button-container">
+      <button class="accept-button" @click="acceptCookies">Accept</button>
+      <button class="decline-button" @click="declineCookies">Decline</button>
+    </div>
+  </div>
+</template>
+
+<script>
 export default {
   data() {
     return {
@@ -24,24 +40,6 @@ export default {
   mounted() {},
 };
 </script>
-
-<template>
-  <div class="container" :class="accepted ? 'slide-down' : 'slide-up'">
-    <font-awesome-icon icon="fa-solid fa-cookie-bite" class="icon" />
-
-    <div class="text-container">
-      This website uses cookies to ensure you get the best experience on our
-      website. Please accept our cookie policy to continue using our website. To
-      learn more about our cookie policy, please visit this
-      <router-link to="/cookies">page</router-link>.
-    </div>
-
-    <div class="button-container">
-      <button class="accept" @click="acceptCookies">Accept</button>
-      <button class="decline" @click="declineCookies">Decline</button>
-    </div>
-  </div>
-</template>
 
 <style scoped>
 /* create container in bottom right side of screen fixed */
@@ -124,43 +122,5 @@ export default {
   margin-top: 10px;
   height: 4vh;
   margin-top: 2vh;
-}
-
-.button-container .accept {
-  transition: all 0.2s ease-in-out;
-  background-color: rgb(27, 161, 27);
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 5px 10px 5px 10px;
-  margin-right: 10px;
-  font-size: 1em;
-  cursor: pointer;
-  width: 100%;
-}
-
-.button-container .accept:hover {
-  transition: all 0.2s ease-in-out;
-  box-shadow: 0 0 10px 0 rgb(36, 206, 36);
-  background-color: rgb(36, 206, 36);
-}
-
-.button-container .decline {
-  transition: all 0.2s ease-in-out;
-  background-color: rgb(73, 16, 16);
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 5px 10px 5px 10px;
-  margin-left: 10px;
-  font-size: 1em;
-  cursor: pointer;
-  width: 100%;
-}
-
-.button-container .decline:hover {
-  transition: all 0.2s ease-in-out;
-  box-shadow: 0 0 10px 0 rgb(209, 47, 47);
-  background-color: rgb(209, 47, 47);
 }
 </style>
