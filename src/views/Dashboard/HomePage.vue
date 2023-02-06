@@ -6,7 +6,18 @@
     
     <div class="homepage-content-container">
       <HeaderComponent />
-      <RouterView class="router-view" />
+      <div class="page-container">
+        <Suspense>
+          <template #default>
+            <RouterView class="router-view" />
+          </template>
+          <template #fallback>
+            <div class="loading">
+              <font-awesome-icon class="icon" icon="spinner" spin />
+            </div>
+          </template>
+        </Suspense>
+      </div>
     </div>
 
     <div v-if="uploaderActive" class="uploader-container">
@@ -55,6 +66,68 @@ export default {
 </script>
 
 <style scoped>
+.button {
+  user-select: none;
+  transition: all 0.1s ease-in-out;
+  border-radius: 10px;
+  padding: 10px 15px 10px 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: rgb(180, 0, 190);
+  cursor: pointer;
+  width: fit-content;
+  color: white;
+  text-align: center;
+}
+
+.button:hover {
+  transition: all 0.1s ease-in-out;
+  background-color: rgb(176, 49, 185);
+  color: white;
+}
+
+.loading {
+  display: flex;
+  flex-direction: row;
+  height: 50vh;
+  width: 100%;
+  margin-top: 25px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: rgb(70, 70, 70);
+  color: rgb(247, 92, 255);
+  border-radius: 10px;
+  font-size: 4em;
+  justify-content: center;
+  align-items: center;
+  background-size: 400% 400%;
+	animation: colorShift 5s ease infinite;
+}
+
+/* keyframes to animate color change of spinner */
+@keyframes colorShift {
+  0% {
+    color: rgb(247, 92, 255);
+  }
+  50% {
+    color: rgb(163, 55, 167);
+  }
+  100% {
+    color: rgb(247, 92, 255);
+  }
+}
+
+.page-container {
+  height: 100%;
+  width: 80vw;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 25px;
+  margin-bottom: 30px;
+  background-color: rgb(70, 70, 70);
+  border-radius: 10px;
+}
+
 .dashboard-container {
   position: relative;
   height: 100%;

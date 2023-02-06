@@ -1,60 +1,61 @@
 <template>
-  <div class="page-container">
-    <div class="bg" v-if="sounds">
-      <div class="sounds-list" v-if="sounds.length > 0">
-        <div
-          v-for="sound of sounds"
-          v-bind:key="sound.id"
-          @click="selectSound(sound)"
-          class="sound"
-          :class="{ 'sound-selected': sound === selectedSound }"
-        >
-          <span class="title">{{ computeStringLength(sound.name, 60) }}</span>
-          <span class="description"><font-awesome-icon class="icon" icon="paperclip" /> {{ sound.description }}</span>
+  <div class="bg" v-if="sounds && typeof sounds === 'object'">
+    <div class="sounds-list" v-if="sounds.length > 0">
+      <div
+        v-for="sound of sounds"
+        v-bind:key="sound.id"
+        @click="selectSound(sound)"
+        class="sound"
+        :class="{ 'sound-selected': sound === selectedSound }"
+      >
+        <span class="title">{{ computeStringLength(sound.name, 60) }}</span>
+        <span class="description"><font-awesome-icon class="icon" icon="paperclip" /> {{ sound.description }}</span>
+      </div>
+    </div>
+    <div class="sounds-info">
+      <div v-if="selectedSound" class="sound-infoes-container" style="width: 95%;">
+        <div class="input-container">
+          <label class="label">Sound Name:</label>
+          <input v-model="selectedSound.name" maxlength="40" placeholder="Type the name of your sound file (max 40)"/>
+          <label class="label">Sound Description:</label>
+          <input v-model="selectedSound.description" maxlength="80" placeholder="Type the description of your sound file (max 80)"/>
+          <label class="label">Points needed:</label>
+          <input type="number" v-model="selectedSound.points" maxlength="80" placeholder="Type the description of your sound file (max 80)"/>
+        </div>
+
+        <div class="slider-container">
+          <label class="label">Volume:</label>
+          <div class="slidecontainer">
+            <input v-model="selectedSound.volume" type="range" min="1" max="100" class="slider">
+            <span style="width: 50px; text-align: center;">{{ (selectedSound.volume) }}%</span>
+          </div>
+        </div>
+
+        <div class="buttons-container">
+          <div class="save-button" @click="saveSound(selectedSound)">
+            <span><font-awesome-icon class="icon" icon="floppy-disk" /> Save</span>
+          </div>
+          <div class="delete-button" @click="deleteSound(selectedSound)">
+            <span><font-awesome-icon class="icon" icon="trash" /> Delete</span>
+          </div>
         </div>
       </div>
-      <div class="sounds-info">
-        <div v-if="selectedSound" class="sound-infoes-container" style="width: 95%;">
-          <div class="input-container">
-            <label class="label">Sound Name:</label>
-            <input v-model="selectedSound.name" maxlength="40" placeholder="Type the name of your sound file (max 40)"/>
-            <label class="label">Sound Description:</label>
-            <input v-model="selectedSound.description" maxlength="80" placeholder="Type the description of your sound file (max 80)"/>
-            <label class="label">Points needed:</label>
-            <input type="number" v-model="selectedSound.points" maxlength="80" placeholder="Type the description of your sound file (max 80)"/>
-          </div>
-
-          <div class="slider-container">
-            <label class="label">Volume:</label>
-            <div class="slidecontainer">
-              <input v-model="selectedSound.volume" type="range" min="1" max="100" class="slider">
-              <span style="width: 50px; text-align: center;">{{ (selectedSound.volume) }}%</span>
-            </div>
-          </div>
-
-          <div class="buttons-container">
-            <div class="save-button" @click="saveSound(selectedSound)">
-              <span><font-awesome-icon class="icon" icon="floppy-disk" /> Save</span>
-            </div>
-            <div class="delete-button" @click="deleteSound(selectedSound)">
-              <span><font-awesome-icon class="icon" icon="trash" /> Delete</span>
-            </div>
-          </div>
-        </div>
-        <div v-else class="sound-infoes-container" style="margin: auto; width: 65%;">
-          <div style="text-align: center;" v-if="sounds.length > 0">Select a sound</div>
-          <div class="no-sounds-container" v-else>
-            <span>No sounds to show <font-awesome-icon class="icon" icon="face-frown" /></span>
-            <div class="upload-button" @click="activateUploader()">
-              <span><font-awesome-icon class="icon" icon="plus" /> Upload one</span>
-            </div>
+      <div v-else class="sound-infoes-container" style="margin: auto; width: 65%;">
+        <div style="text-align: center;" v-if="sounds.length > 0">Select a sound</div>
+        <div class="no-sounds-container" v-else>
+          <span>No sounds to show <font-awesome-icon class="icon" icon="face-frown" /></span>
+          <div class="upload-button" @click="activateUploader()">
+            <span><font-awesome-icon class="icon" icon="plus" /> Upload one</span>
           </div>
         </div>
       </div>
     </div>
-    <div v-else>
-      <div class="loading">
-        <font-awesome-icon class="icon" icon="spinner" spin />
+  </div>
+  <div v-else-if="typeof sounds === 'string'">
+    <div class="error-container">
+      <span class="error-message">{{ sounds }}</span>
+      <div class="refresh-button" @click="reload()">
+        <span><font-awesome-icon class="icon" icon="rotate" /> Refresh</span>
       </div>
     </div>
   </div>
@@ -63,119 +64,20 @@
 <script>
 import emitter from "tiny-emitter/instance";
 
+import { getCachedSounds } from '../../compositions/SoundsGetterAPI.js';
+
 export default {
   name: "sounds",
+  async setup() {
+    return {
+      sounds: await getCachedSounds(),
+    }
+  },
+
   data() {
-    if (process.env.NODE_ENV === "development")
-      return {
-        sounds: [
-          // {
-          //   id: "b22bbdf0-8d82-41c1-b7d2-5e93ad632c27",
-          //   path: "C:/Users/username/Music/sound1.mp3",
-          //   name: "Meme sound number one",
-          //   description: "This is a description for the sound",
-          //   volume: 30,
-          //   points: 80,
-          //   isPlaying: false,
-          // },
-          // {
-          //   id: "67a92512-1237-4dd3-a63c-3d7a6c0d8f40",
-          //   path: "C:/Users/username/Music/sound2.mp3",
-          //   name: "Emotional damage",
-          //   description: "This is a description for the sound",
-          //   volume: 70,
-          //   points: 100,
-          //   isPlaying: false,
-          // },
-          // {
-          //   id: "850a518f-9e6e-4552-9b49-afd80b687839",
-          //   path: "C:/Users/username/Music/sound3.mp3",
-          //   name: "Very long name for a sound to add to this website, and still adding shit to see how the container behaves",
-          //   description: "This is a description for the sound",
-          //   volume: 95,
-          //   points: 200,
-          //   isPlaying: false,
-          // },
-          // {
-          //   id: "7ff7233d-7c0a-4f5f-ae93-fca9a2f75d76",
-          //   path: "C:/Users/username/Music/sound3.mp3",
-          //   name: "Very long name for a sound to add to this website, and still adding shit to see how the container behaves",
-          //   description: "This is a description for the sound",
-          //   volume: 10,
-          //   points: 20,
-          //   isPlaying: false,
-          // },
-          // {
-          //   id: "2a181a1f-ad47-4f45-8611-e05cffdb0b51",
-          //   path: "C:/Users/username/Music/sound3.mp3",
-          //   name: "Very long name for a sound to add to this website, and still adding shit to see how the container behaves",
-          //   description: "This is a description for the sound",
-          //   volume: 99,
-          //   points: 90,
-          //   isPlaying: false,
-          // },
-          // {
-          //   id: "2a181a1f-ad47-4f45-8611-e05cffd30b51",
-          //   path: "C:/Users/username/Music/sound3.mp3",
-          //   name: "Very long name for a sound to add to this website, and still adding shit to see how the container behaves",
-          //   description: "This is a description for the sound",
-          //   volume: 99,
-          //   points: 90,
-          //   isPlaying: false,
-          // },
-          // {
-          //   id: "21181a1f-ad47-4f45-8611-e05cffd30b51",
-          //   path: "C:/Users/username/Music/sound3.mp3",
-          //   name: "Very long name for a sound to add to this website, and still adding shit to see how the container behaves",
-          //   description: "This is a description for the sound",
-          //   volume: 99,
-          //   points: 90,
-          //   isPlaying: false,
-          // },
-          // {
-          //   id: "21181a1f-ad47-4f45-8611-e05cffd30b59",
-          //   path: "C:/Users/username/Music/sound3.mp3",
-          //   name: "Very long name for a sound to add to this website, and still adding shit to see how the container behaves",
-          //   description: "This is a description for the sound",
-          //   volume: 99,
-          //   points: 90,
-          //   isPlaying: false,
-          // },
-          // {
-          //   id: "21181a1a-ad47-4f45-8611-e05cffd30b59",
-          //   path: "C:/Users/username/Music/sound3.mp3",
-          //   name: "Very long name for a sound to add to this website, and still adding shit to see how the container behaves",
-          //   description: "This is a description for the sound",
-          //   volume: 99,
-          //   points: 90,
-          //   isPlaying: false,
-          // },
-          // {
-          //   id: "21181a1a-ad47-4v45-8611-e05cffd30b59",
-          //   path: "C:/Users/username/Music/sound3.mp3",
-          //   name: "Very long name for a sound to add to this website, and still adding shit to see how the container behaves",
-          //   description: "This is a description for the sound",
-          //   volume: 99,
-          //   points: 90,
-          //   isPlaying: false,
-          // },
-          // {
-          //   id: "21181a1a-ad47-4v45-8611-e03cffd30b59",
-          //   path: "C:/Users/username/Music/sound3.mp3",
-          //   name: "Very long name for a sound to add to this website, and still adding shit to see how the container behaves",
-          //   description: "This is a description for the sound",
-          //   volume: 99,
-          //   points: 90,
-          //   isPlaying: false,
-          // },
-        ],
-        selectedSound: null,
-      };
-    else
-      return {
-        sounds: null,
-        selectedSound: null,
-      };
+    return {
+      selectedSound: null,
+    };
   },
 
   methods: {
@@ -221,6 +123,9 @@ export default {
     activateUploader() {
       emitter.emit("toggle-uploader", true);
     },
+    reload() {
+      window.location.reload();
+    },
   },
 
   watch: {
@@ -232,46 +137,21 @@ export default {
 </script>
 
 <style scoped>
-.page-container {
-  height: 100%;
-  width: 80vw;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 25px;
-  margin-bottom: 30px;
-  background-color: rgb(70, 70, 70);
-  border-radius: 10px;
-}
-
-.loading {
+.error-container {
   display: flex;
-  flex-direction: row;
-  height: 50vh;
+  flex-direction: column;
+  height: 100%;
   width: 100%;
+  margin: auto;
   margin-top: 25px;
-  margin-left: auto;
-  margin-right: auto;
-  background-color: rgb(70, 70, 70);
-  color: rgb(247, 92, 255);
+  margin-bottom: 25px;
   border-radius: 10px;
-  font-size: 4em;
-  justify-content: center;
-  align-items: center;
-  background-size: 400% 400%;
-	animation: colorShift 5s ease infinite;
 }
 
-/* keyframes to animate color change of spinner */
-@keyframes colorShift {
-  0% {
-    color: rgb(247, 92, 255);
-  }
-  50% {
-    color: rgb(163, 55, 167);
-  }
-  100% {
-    color: rgb(247, 92, 255);
-  }
+.error-message {
+  margin: auto;
+  font-size: 20px;
+  color: white;
 }
 
 .input-container {
@@ -462,6 +342,28 @@ export default {
 }
 
 .save-button:hover {
+  transition: all 0.1s ease-in-out;
+  background-color: rgb(176, 49, 185);
+  color: white;
+}
+
+.refresh-button {
+  user-select: none;
+  transition: all 0.1s ease-in-out;
+  border-radius: 10px;
+  padding: 10px 15px 10px 10px;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  background-color: rgb(180, 0, 190);
+  cursor: pointer;
+  width: fit-content;
+  color: white;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.refresh-button:hover {
   transition: all 0.1s ease-in-out;
   background-color: rgb(176, 49, 185);
   color: white;
