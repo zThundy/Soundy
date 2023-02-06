@@ -1,0 +1,100 @@
+.save-button {
+  user-select: none;
+  transition: all 0.1s ease-in-out;
+  border-radius: 10px;
+  padding: 10px 15px 10px 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: rgb(180, 0, 190);
+  cursor: pointer;
+  width: fit-content;
+  color: white;
+  text-align: center;
+}
+
+.save-button:hover {
+  transition: all 0.1s ease-in-out;
+  background-color: rgb(176, 49, 185);
+  color: white;
+}
+
+.delete-button {
+  user-select: none;
+  transition: all 0.1s ease-in-out;
+  border-radius: 10px;
+  padding: 10px 15px 10px 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: rgb(151, 0, 0);
+  cursor: pointer;
+  width: fit-content;
+  color: white;
+  text-align: center;
+  margin-left: 3%;
+}
+
+.delete-button:hover {
+  transition: all 0.1s ease-in-out;
+  background-color: rgb(190, 0, 0);
+  color: white;
+}
+
+.refresh-button {
+  user-select: none;
+  transition: all 0.1s ease-in-out;
+  border-radius: 10px;
+  padding: 10px 15px 10px 10px;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  background-color: rgb(180, 0, 190);
+  cursor: pointer;
+  width: fit-content;
+  color: white;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.refresh-button:hover {
+  transition: all 0.1s ease-in-out;
+  background-color: rgb(176, 49, 185);
+  color: white;
+}
+
+.accept-button {
+  transition: all 0.2s ease-in-out;
+  background-color: rgb(27, 161, 27);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px 5px 10px;
+  margin-right: 10px;
+  font-size: 1em;
+  cursor: pointer;
+  width: 100%;
+}
+
+.accept-button:hover {
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 0 10px 0 rgb(36, 206, 36);
+  background-color: rgb(36, 206, 36);
+}
+
+.decline-button {
+  transition: all 0.2s ease-in-out;
+  background-color: rgb(73, 16, 16);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px 5px 10px;
+  margin-left: 10px;
+  font-size: 1em;
+  cursor: pointer;
+  width: 100%;
+}
+
+.decline-button:hover {
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 0 10px 0 rgb(209, 47, 47);
+  background-color: rgb(209, 47, 47);
+}
