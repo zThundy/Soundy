@@ -7,15 +7,15 @@
     <DropZone class="drop-area" @files-dropped="addFile" #default="{ dropZoneActive }">
       <label for="file-input" class="file-input-label">
         <span v-if="dropZoneActive">
-          <span>Alsmost there!</span>
+          <span><font-awesome-icon :icon="computeIcon()" :spin="computeIcon() === 'spinner' ? true : false"/></span>
           <span class="smaller">
             Release <strong><em>here</em></strong> to upload the file
           </span>
         </span>
         <span v-else>
-          <span>Drag Your Files Here</span>
+          <span><font-awesome-icon :icon="computeIcon()"/></span>
           <span class="smaller">
-            or <strong><em>click here</em></strong> to select files
+            Drag Your Files Here or <strong><em>click here</em></strong> to select files
           </span>
         </span>
 
@@ -29,7 +29,7 @@
     </DropZone>
 
     <div class="buttons-container">
-      <button @click.prevent="uploadClick" class="upload-button">Upload</button>
+      <button @click.prevent="uploadClick" id="upload-button" class="upload-button">Upload</button>
       <button @click.prevent="cancel" class="upload-button">Cancel</button>
     </div>
   </div>
@@ -75,14 +75,17 @@ export default {
     computeStatus(status) {
       switch (status) {
         case 'loading':
-          return 'Uploading...'
+          return 'UPLOADING...'
         case 'success':
-          setTimeout(() => this.cancel(), 1000);
-          return 'Uploaded!'
+          setTimeout(() => this.cancel(), 2000);
+          return 'UPLOADED!'
         case 'error':
-          return 'Error'
+          // ri enable button
+          const button = document.querySelector('#upload-button');
+          button.disabled = false;
+          return 'ERROR'
         default:
-          return 'Ready'
+          return 'READY'
       }
     },
     computeName(name) {
@@ -91,6 +94,13 @@ export default {
         if (name.length > 50) name = name.slice(0, 50) + '...'
       }
       return name
+    },
+    computeIcon() {
+      if (!file.value.name) return "arrow-up-from-bracket";
+      if (file.value.status === "ready") return "circle-minus";
+      if (file.value.status === 'loading') return 'spinner';
+      if (file.value.status === 'success') return 'circle-check';
+      if (file.value.status === 'error') return 'circle-xmark';
     },
     uploadClick(e) {
       if (!file.value.name) {
@@ -255,7 +265,6 @@ export default {
 
 .close-button:hover {
   transition: all .1s ease-in-out;
-  color: rgb(200, 0, 0);
-  rotate: 360deg;
+  color: rgb(250, 0, 0);
 }
 </style>

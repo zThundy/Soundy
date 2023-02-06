@@ -33,6 +33,11 @@ import {
   faFaceSmile,
   faPlus,
   faXmark,
+  faArrowUpFromBracket,
+  faCircleCheck,
+  faCircleMinus,
+  faCircleXmark,
+  faRotate,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -67,7 +72,12 @@ library.add(
   faFaceFrown,
   faFaceSmile,
   faPlus,
-  faXmark
+  faXmark,
+  faArrowUpFromBracket,
+  faCircleCheck,
+  faCircleMinus,
+  faCircleXmark,
+  faRotate
 );
 
 // This is cool, but too heavy for the user.
