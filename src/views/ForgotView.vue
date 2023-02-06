@@ -1,7 +1,6 @@
 <script>
-import emitter from "tiny-emitter/instance";
-
 export default {
+  inject: ["$emitter"],
   data() {
     return {
       email: "",
@@ -11,7 +10,7 @@ export default {
   methods: {
     login() {
       if (!this.isEmailValid(this.email)) {
-        emitter.emit("notif", {
+        this.$emitter.emit("notif", {
           message:
             "Please enter a valid email address to request a password reset",
           type: "error",

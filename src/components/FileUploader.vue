@@ -36,7 +36,6 @@
 </template>
 
 <script>
-import emitter from "tiny-emitter/instance";
 // Components
 import DropZone from './DropZone.vue'
 // File Management
@@ -51,14 +50,10 @@ function onInputChange(e) {
 	e.target.value = null // reset so that selecting the same file again will still cause it to fire this change
 }
 
-function cancel() {
-  emitter.emit("toggle-uploader", false);
-  removeFile();
-}
-
 const { uploadFile } = createUploader('https://discord.com/api/webhooks/1071101423242182696/VhL9eFJ_RiOS293nnW2MUjj0IYwPo42YKRY9bjFkwr8lx4mjLx2HUpgQsN1dTPqvmtTb')
 
 export default {
+  inject: ["$emitter"],
   components: { DropZone },
   setup() {
     return {
@@ -72,6 +67,10 @@ export default {
   },
 
   methods: {
+    cancel() {
+      this.$emitter.emit("toggle-uploader", false);
+      removeFile();
+    },
     computeStatus(status) {
       switch (status) {
         case 'loading':
@@ -104,7 +103,7 @@ export default {
     },
     uploadClick(e) {
       if (!file.value.name) {
-        return emitter.emit("notif", {
+        return this.$emitter.emit("notif", {
           message: 'Please select a file first',
           type: "error",
           time: 1500,

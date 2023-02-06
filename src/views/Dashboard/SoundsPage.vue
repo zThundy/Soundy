@@ -62,12 +62,11 @@
 </template>
 
 <script>
-import emitter from "tiny-emitter/instance";
-
-import { getCachedSounds } from '../../compositions/SoundsGetterAPI.js';
+import { getCachedSounds } from './../../apis/SoundsGetterAPI.js';
 
 export default {
   name: "sounds",
+  inject: ["$emitter"],
   async setup() {
     return {
       sounds: await getCachedSounds(),
@@ -99,7 +98,7 @@ export default {
     },
     saveSound(sound) {
       // TODO: Save sound
-      emitter.emit("notif", {
+      this.$emitter.emit("notif", {
         message: 'Sound "' + sound.name + '" saved!',
         type: "success",
         time: 500,
@@ -114,14 +113,14 @@ export default {
       }
       this.selectedSound = null;
       // TODO: Delete sound
-      emitter.emit("notif", {
+      this.$emitter.emit("notif", {
         message: 'Sound "' + sound.name + '" deleted!',
         type: "success",
         time: 500,
       });
     },
     activateUploader() {
-      emitter.emit("toggle-uploader", true);
+      this.$emitter.emit("toggle-uploader", true);
     },
     reload() {
       window.location.reload();
@@ -136,7 +135,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .error-container {
   display: flex;
   flex-direction: column;
@@ -301,69 +300,6 @@ export default {
 }
 
 .upload-button:hover {
-  transition: all 0.1s ease-in-out;
-  background-color: rgb(176, 49, 185);
-  color: white;
-}
-
-.delete-button {
-  user-select: none;
-  transition: all 0.1s ease-in-out;
-  border-radius: 10px;
-  padding: 10px 15px 10px 10px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  background-color: rgb(151, 0, 0);
-  cursor: pointer;
-  width: fit-content;
-  color: white;
-  text-align: center;
-  margin-left: 3%;
-}
-
-.delete-button:hover {
-  transition: all 0.1s ease-in-out;
-  background-color: rgb(190, 0, 0);
-  color: white;
-}
-
-.save-button {
-  user-select: none;
-  transition: all 0.1s ease-in-out;
-  border-radius: 10px;
-  padding: 10px 15px 10px 10px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  background-color: rgb(180, 0, 190);
-  cursor: pointer;
-  width: fit-content;
-  color: white;
-  text-align: center;
-}
-
-.save-button:hover {
-  transition: all 0.1s ease-in-out;
-  background-color: rgb(176, 49, 185);
-  color: white;
-}
-
-.refresh-button {
-  user-select: none;
-  transition: all 0.1s ease-in-out;
-  border-radius: 10px;
-  padding: 10px 15px 10px 10px;
-  margin-top: 30px;
-  margin-bottom: 10px;
-  background-color: rgb(180, 0, 190);
-  cursor: pointer;
-  width: fit-content;
-  color: white;
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.refresh-button:hover {
   transition: all 0.1s ease-in-out;
   background-color: rgb(176, 49, 185);
   color: white;

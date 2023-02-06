@@ -19,9 +19,8 @@
 </template>
 
 <script>
-import emitter from "tiny-emitter/instance";
-
 export default {
+  inject: ["$emitter"],
   data() {
     return {
       notif: [
@@ -67,7 +66,7 @@ export default {
   },
 
   mounted() {
-    emitter.on("notif", (data) => this.addNotif(data));
+    this.$emitter.on("notif", (data) => this.addNotif(data));
   },
 };
 </script>

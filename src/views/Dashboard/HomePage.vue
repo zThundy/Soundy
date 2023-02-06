@@ -30,7 +30,6 @@
 
 <script>
 // import { RouterLink, RouterView } from "vue-router";
-import emitter from "tiny-emitter/instance";
 import SideMenu from "../../components/SideMenu.vue";
 import HeaderComponent from "../../components/HeaderComponent.vue";
 import FileUploader from "../../components/FileUploader.vue";
@@ -38,6 +37,7 @@ import FileUploader from "../../components/FileUploader.vue";
 export default {
   name: "HomePage",
   components: { SideMenu, HeaderComponent, FileUploader },
+  inject: ["$emitter"],
   data() {
     return {
       uploaderActive: false,
@@ -54,7 +54,7 @@ export default {
   },
 
   mounted() {
-    emitter.on("toggle-uploader", (bool) => {
+    this.$emitter.on("toggle-uploader", (bool) => {
       if (!bool) {
         this.uploaderActive = !this.uploaderActive;
       } else {

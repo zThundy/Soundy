@@ -1,7 +1,6 @@
 <script>
-import emitter from "tiny-emitter/instance";
-
 export default {
+  inject: ["$emitter"],
   data() {
     return {
       username: "",
@@ -19,7 +18,7 @@ export default {
         this.password.length === 0 ||
         this.repeatPassword.length === 0
       ) {
-        emitter.emit("notif", {
+        this.$emitter.emit("notif", {
           message: "Please fill in all fields to create an account",
           type: "error",
           time: 1000,
@@ -27,7 +26,7 @@ export default {
         return;
       }
       if (!this.isEmailValid(this.email)) {
-        emitter.emit("notif", {
+        this.$emitter.emit("notif", {
           message: "Please enter a valid email address",
           type: "error",
           time: 1000,
@@ -35,7 +34,7 @@ export default {
         return;
       }
       if (this.isEmailValid(this.username)) {
-        emitter.emit("notif", {
+        this.$emitter.emit("notif", {
           message: "Please enter a valid username",
           type: "error",
           time: 1000,
@@ -43,14 +42,14 @@ export default {
         return;
       }
       if (this.password !== this.repeatPassword) {
-        emitter.emit("notif", {
+        this.$emitter.emit("notif", {
           message: "Passwords do not match",
           type: "error",
           time: 1000,
         });
         return;
       }
-      emitter.emit("notif", {
+      this.$emitter.emit("notif", {
         message: "Account created successfully",
         type: "success",
       });
