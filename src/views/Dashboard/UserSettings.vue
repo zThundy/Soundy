@@ -2,9 +2,17 @@
   <div class="user-settings-container">
     <div class="settings-input-container">
       <label class="label">Username:</label>
-      <input v-model="profile.name" maxlength="20" placeholder="Type the name of your sound file (max 20)"/>
+      <input
+        v-model="profile.name"
+        maxlength="20"
+        placeholder="Type the name of your sound file (max 20)"
+      />
       <label class="label">Email:</label>
-      <input v-model="profile.email" maxlength="50" placeholder="Type the description of your sound file (max 50)"/>
+      <input
+        v-model="profile.email"
+        maxlength="50"
+        placeholder="Type the description of your sound file (max 50)"
+      />
       <div class="refresh-button" @click="saveProfile()">
         <span><font-awesome-icon icon="floppy-disk" /> Save</span>
       </div>
@@ -14,7 +22,7 @@
 
 <script>
 export default {
-  name: "settings",
+  name: "UserSettings",
   inject: ["$profileAPI", "$emitter"],
   data() {
     return {

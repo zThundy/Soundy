@@ -9,43 +9,84 @@
         :class="{ 'sound-selected': sound === selectedSound }"
       >
         <span class="title">{{ computeStringLength(sound.name, 60) }}</span>
-        <span class="description"><font-awesome-icon class="icon" icon="paperclip" /> {{ sound.description }}</span>
+        <span class="description"
+          ><font-awesome-icon class="icon" icon="paperclip" />
+          {{ sound.description }}</span
+        >
       </div>
     </div>
     <div class="sounds-info">
-      <div v-if="selectedSound" class="sound-infoes-container" style="width: 95%;">
+      <div
+        v-if="selectedSound"
+        class="sound-infoes-container"
+        style="width: 95%"
+      >
         <div class="input-container">
           <label class="label">Sound Name:</label>
-          <input v-model="selectedSound.name" maxlength="40" placeholder="Type the name of your sound file (max 40)"/>
+          <input
+            v-model="selectedSound.name"
+            maxlength="40"
+            placeholder="Type the name of your sound file (max 40)"
+          />
           <label class="label">Sound Description:</label>
-          <input v-model="selectedSound.description" maxlength="80" placeholder="Type the description of your sound file (max 80)"/>
+          <input
+            v-model="selectedSound.description"
+            maxlength="80"
+            placeholder="Type the description of your sound file (max 80)"
+          />
           <label class="label">Points needed:</label>
-          <input type="number" v-model="selectedSound.points" maxlength="80" placeholder="Type the description of your sound file (max 80)"/>
+          <input
+            type="number"
+            v-model="selectedSound.points"
+            maxlength="80"
+            placeholder="Type the description of your sound file (max 80)"
+          />
         </div>
 
         <div class="slider-container">
           <label class="label">Volume:</label>
           <div class="slidecontainer">
-            <input v-model="selectedSound.volume" type="range" min="1" max="100" class="slider">
-            <span style="width: 50px; text-align: center;">{{ (selectedSound.volume) }}%</span>
+            <input
+              v-model="selectedSound.volume"
+              type="range"
+              min="1"
+              max="100"
+              class="slider"
+            />
+            <span style="width: 50px; text-align: center"
+              >{{ selectedSound.volume }}%</span
+            >
           </div>
         </div>
 
         <div class="buttons-container">
           <div class="save-button" @click="saveSound(selectedSound)">
-            <span><font-awesome-icon class="icon" icon="floppy-disk" /> Save</span>
+            <span
+              ><font-awesome-icon class="icon" icon="floppy-disk" /> Save</span
+            >
           </div>
           <div class="delete-button" @click="deleteSound(selectedSound)">
             <span><font-awesome-icon class="icon" icon="trash" /> Delete</span>
           </div>
         </div>
       </div>
-      <div v-else class="sound-infoes-container" style="margin: auto; width: 65%;">
-        <div style="text-align: center;" v-if="sounds.length > 0">Select a sound</div>
+      <div
+        v-else
+        class="sound-infoes-container"
+        style="margin: auto; width: 65%"
+      >
+        <div style="text-align: center" v-if="sounds.length > 0">
+          Select a sound
+        </div>
         <div class="no-sounds-container" v-else>
-          <span>No sounds to show <font-awesome-icon class="icon" icon="face-frown" /></span>
+          <span
+            >No sounds to show
+            <font-awesome-icon class="icon" icon="face-frown"
+          /></span>
           <div class="upload-button" @click="activateUploader()">
-            <span><font-awesome-icon class="icon" icon="plus" /> Upload one</span>
+            <span
+              ><font-awesome-icon class="icon" icon="plus" /> Upload one</span
+            >
           </div>
         </div>
       </div>
@@ -62,15 +103,15 @@
 </template>
 
 <script>
-import { getCachedSounds } from './../../apis/SoundsGetterAPI.js';
+import { getCachedSounds } from "./../../apis/SoundsGetterAPI.js";
 
 export default {
-  name: "sounds",
+  name: "SoundsPage",
   inject: ["$emitter"],
   async setup() {
     return {
       sounds: await getCachedSounds(),
-    }
+    };
   },
 
   data() {
@@ -127,11 +168,9 @@ export default {
     },
   },
 
-  watch: {
-  },
+  watch: {},
 
-  computed: {
-  },
+  computed: {},
 };
 </script>
 
@@ -333,8 +372,8 @@ export default {
   background: #d3d3d3;
   outline: none;
   opacity: 0.7;
-  -webkit-transition: .2s;
-  transition: opacity .2s;
+  -webkit-transition: 0.2s;
+  transition: opacity 0.2s;
   border-radius: 20px;
 }
 

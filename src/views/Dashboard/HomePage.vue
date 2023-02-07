@@ -1,9 +1,9 @@
 <template>
   <!-- table to contain sidebar and content of page -->
-  
+
   <div class="dashboard-container">
     <SideMenu />
-    
+
     <div class="homepage-content-container">
       <HeaderComponent />
       <div class="page-container">
@@ -101,7 +101,7 @@ export default {
   justify-content: center;
   align-items: center;
   background-size: 400% 400%;
-	animation: colorShift 5s ease infinite;
+  animation: colorShift 5s ease infinite;
 }
 
 /* keyframes to animate color change of spinner */
@@ -141,7 +141,7 @@ export default {
     rgba(40, 40, 40, 1) 100%
   );
   background-size: 400% 400%;
-	animation: gradient 20s ease infinite;
+  animation: gradient 20s ease infinite;
 }
 
 @keyframes gradient {
@@ -168,10 +168,10 @@ export default {
   /* display: flex; */
   /* flex-direction: column; */
   /* text-align: center; */
-	margin: 0 auto;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   width: 100%;
   height: 100%;
   /* color: white; */

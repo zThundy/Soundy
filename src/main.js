@@ -93,14 +93,13 @@ library.add(
 // }
 
 // create the application adding all the components
-const app = createApp(App)
-  .component("font-awesome-icon", FontAwesomeIcon);
+const app = createApp(App).component("font-awesome-icon", FontAwesomeIcon);
 
 // add vue router component
 app.use(router);
 // add profile API
-app.provide('$profileAPI', ProfileAPI);
+app.provide("$profileAPI", ProfileAPI);
 // add event emitter
-app.provide('$emitter', emitter);
+app.provide("$emitter", emitter);
 // mount the app
 app.mount("#app");

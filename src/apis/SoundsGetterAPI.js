@@ -1,7 +1,7 @@
-import { log } from '../compositions/Logger.js';
+import { log } from "../compositions/Logger.js";
 
 var sounds = null;
-if (process.env.NODE_ENV === 'development' && true) {
+if (process.env.NODE_ENV === "development" && true) {
   sounds = [
     {
       id: "b22bbdf0-8d82-41c1-b7d2-5e93ad632c27",
@@ -103,17 +103,19 @@ async function _getSounds() {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": "Bearer " + localStorage.getItem("token"),
+      Authorization: "Bearer " + localStorage.getItem("token"),
     },
     body: JSON.stringify(),
   })
-  .then((response) => response.json())
-  .then((data) => {
-    sounds = data;
-  })
-  .catch((error) => {
-    const logId = log("Error getting sounds from server", error);
-    console.error("Error:", error);
-    sounds = "There has been an error, please try again Later. If the problem persists, please contact the administrator. Error ID: " + logId;
-  });
+    .then((response) => response.json())
+    .then((data) => {
+      sounds = data;
+    })
+    .catch((error) => {
+      const logId = log("Error getting sounds from server", error);
+      console.error("Error:", error);
+      sounds =
+        "There has been an error, please try again Later. If the problem persists, please contact the administrator. Error ID: " +
+        logId;
+    });
 }

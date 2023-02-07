@@ -50,7 +50,7 @@ const router = createRouter({
           name: "alert-settings",
           path: "alert-settings",
           component: () => import("../views/Dashboard/AlertSettings.vue"),
-        }
+        },
       ],
     },
   ],

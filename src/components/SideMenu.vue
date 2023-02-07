@@ -1,6 +1,8 @@
 <template>
-  <div class="menu-container" :class="{ 'collapsed': collapsed }">
-    <div style="width: 100%; text-align: center;"><img src="/assets/logo-500x500.png" /></div>
+  <div class="menu-container" :class="{ collapsed: collapsed }">
+    <div style="width: 100%; text-align: center">
+      <img src="/assets/logo-500x500.png" />
+    </div>
 
     <div class="elem-container">
       <div
@@ -8,15 +10,15 @@
         v-bind:key="element.path"
         class="elem"
         @click="changePath(element.path)"
-        :class="{ 'selected': element.selected }"
+        :class="{ selected: element.selected }"
         :style="[element.color ? { color: element.color } : {}]"
       >
         <font-awesome-icon :icon="element.icon" />
-        <span :class="{ 'collapsed': collapsed }">{{ element.text }}</span>
+        <span :class="{ collapsed: collapsed }">{{ element.text }}</span>
       </div>
     </div>
 
-    <div style="justify-content: flex-end;" class="elem-container">
+    <div style="justify-content: flex-end" class="elem-container">
       <div
         v-for="element of elementsBottom"
         v-bind:key="element.text"
@@ -25,13 +27,20 @@
         :style="[element.color ? { color: element.color } : {}]"
       >
         <font-awesome-icon :icon="element.icon" />
-        <span :class="{ 'collapsed': collapsed }">{{ element.text }}</span>
+        <span :class="{ collapsed: collapsed }">{{ element.text }}</span>
       </div>
     </div>
 
     <!-- create social links footer -->
-    <div class="footer-links" :style="[ collapsed ? { height: '22%' } : {} ]">
-      <div class="social-links" :style="[ collapsed ? { 'flex-direction': 'column', 'justify-content': 'flex-start' } : {} ]">
+    <div class="footer-links" :style="[collapsed ? { height: '22%' } : {}]">
+      <div
+        class="social-links"
+        :style="[
+          collapsed
+            ? { 'flex-direction': 'column', 'justify-content': 'flex-start' }
+            : {},
+        ]"
+      >
         <a href="https://github.com/zthundy" target="_blank">
           <font-awesome-icon icon="fa-brands fa-github" />
         </a>
@@ -56,7 +65,7 @@
 
 <script>
 // import { watch } from "vue";
-import { useRoute, /* useRouter */ } from 'vue-router'
+import { useRoute /* useRouter */ } from "vue-router";
 
 export default {
   name: "SideMenu",
@@ -64,7 +73,7 @@ export default {
     // const router = useRouter()
     const page = useRoute();
 
-    const routes = this.$router.options.routes
+    const routes = this.$router.options.routes;
     var elementsTop = [];
     for (const route of routes) {
       if (route.name === "dashboard") {
@@ -72,9 +81,13 @@ export default {
           elementsTop.push({
             name: children.name,
             path: "/dashboard/" + page.params.id + "/" + children.path,
-            text: (children.name.charAt(0).toUpperCase() + children.name.slice(1)).replace(/([-])/g, " ").trim(),
+            text: (
+              children.name.charAt(0).toUpperCase() + children.name.slice(1)
+            )
+              .replace(/([-])/g, " ")
+              .trim(),
             icon: children.icon,
-          })
+          });
         }
       }
     }
@@ -111,7 +124,7 @@ export default {
   created() {
     window.addEventListener("resize", this.myEventHandler);
   },
-  destroyed() {
+  unmounted() {
     window.removeEventListener("resize", this.myEventHandler);
   },
 
@@ -122,13 +135,17 @@ export default {
       } else {
         this.collapsed = false;
       }
-      if (this.collapsed) this.elementsBottom[0].icon = "arrow-right"; else this.elementsBottom[0].icon = "arrow-left";
+      if (this.collapsed) this.elementsBottom[0].icon = "arrow-right";
+      else this.elementsBottom[0].icon = "arrow-left";
     },
     changeSelected() {
       // change selected element
       for (var i in this.elementsTop) {
         // trim and replace all spaces with dashes
-        if (this.$route.name === this.elementsTop[i].text.trim().replace(/\s+/g, "-").toLowerCase()) {
+        if (
+          this.$route.name ===
+          this.elementsTop[i].text.trim().replace(/\s+/g, "-").toLowerCase()
+        ) {
           this.elementsTop[i].selected = true;
         } else {
           this.elementsTop[i].selected = false;
@@ -139,7 +156,8 @@ export default {
       if (element.text === "Collapse") {
         this.collapsed = !this.collapsed;
         // rotate by 180deg the arrow
-        if (this.collapsed) element.icon = "arrow-right"; else element.icon = "arrow-left";
+        if (this.collapsed) element.icon = "arrow-right";
+        else element.icon = "arrow-left";
       } else if (element.text === "Log out") {
         // this.$cookies.remove("token");
         this.$router.push("/");
@@ -192,7 +210,7 @@ span {
 span.collapsed {
   transition: all 0.2s ease-in-out;
   font-size: 0;
-  opacity: .3em;
+  opacity: 0.3em;
 }
 
 .elem-container {
@@ -223,13 +241,13 @@ span.collapsed {
 .elem:not(.selected):hover {
   /* box-shadow: 0 0 10px 0 rgb(255, 255, 255); */
   border: 1px rgba(255, 255, 255, 0.2) solid;
-  background-color: rgba(29, 0, 29, .1);
+  background-color: rgba(29, 0, 29, 0.1);
 }
 
 .selected {
   box-shadow: 0 0 1px 0 rgb(255, 255, 255);
   border: 1px rgba(255, 255, 255, 0.2) solid;
-  background-color: rgba(29, 0, 29, .2);
+  background-color: rgba(29, 0, 29, 0.2);
 }
 
 img {

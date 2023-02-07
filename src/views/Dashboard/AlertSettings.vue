@@ -1,17 +1,16 @@
 <template>
-  <div class="container">
-    Alert Settings
-  </div>
+  <div class="container">Alert Settings</div>
 </template>
 
 <script>
 export default {
+  name: "AlertSettings",
   data() {
-    return {}
+    return {};
   },
 
   mounted() {
-    console.log("mounted")
-  }
-}
+    console.log("mounted");
+  },
+};
 </script>

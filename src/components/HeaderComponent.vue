@@ -8,7 +8,9 @@
     <div class="profile-container">
       <div class="multitext-container">
         <span class="profile-name">{{ profile.name }}</span>
-        <div class="profile-edit"><font-awesome-icon class="icon" icon="pencil" /> Account</div>
+        <div class="profile-edit">
+          <font-awesome-icon class="icon" icon="pencil" /> Account
+        </div>
       </div>
       <img src="/assets/zThundy.png" />
     </div>
@@ -24,7 +26,7 @@ export default {
       profile: this.$profileAPI.getCachedProfile(),
     };
   },
-}
+};
 </script>
 
 <style>
@@ -114,7 +116,7 @@ export default {
 }
 
 .profile-edit {
-  font-size: .8em;
+  font-size: 0.8em;
   transition: all 0.1s ease-in-out;
 }
 

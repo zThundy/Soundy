@@ -1,12 +1,13 @@
-import { log } from '../compositions/Logger.js';
+import { log } from "../compositions/Logger.js";
 
 class ProfileAPI {
   constructor() {
-    if (process.env.NODE_ENV === 'development' && true) {
+    if (process.env.NODE_ENV === "development" && true) {
       this.profileInfo = {
-        name: 'zThundy__',
+        name: "zThundy__",
         email: "test@example.com",
-        profilePicture: 'https://cdn.discordapp.com/attachments/1052161749534654465/1072248158014406688/zThundy_gift.png',
+        profilePicture:
+          "https://cdn.discordapp.com/attachments/1052161749534654465/1072248158014406688/zThundy_gift.png",
       };
     } else {
       this.profileInfo = null;
@@ -23,7 +24,7 @@ class ProfileAPI {
     }
 
     try {
-      const response = await fetch('/api/profile');
+      const response = await fetch("/api/profile");
       const data = await response.json();
       this.profileInfo = data;
       return data;
