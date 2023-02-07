@@ -3,6 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 import ProfileAPI from "./apis/ProfileGetterAPI.js";
 import emitter from "tiny-emitter/instance";
+import VueCookies from 'vue3-cookies'
 
 import "./assets/main.css";
 import "./assets/buttons.css";
@@ -42,6 +43,7 @@ import {
   faCircleXmark,
   faRotate,
   faWindowMaximize,
+  faCamera,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -82,7 +84,8 @@ library.add(
   faCircleMinus,
   faCircleXmark,
   faRotate,
-  faWindowMaximize
+  faWindowMaximize,
+  faCamera
 );
 
 // This is cool, but too heavy for the user.
@@ -97,6 +100,12 @@ const app = createApp(App).component("font-awesome-icon", FontAwesomeIcon);
 
 // add vue router component
 app.use(router);
+// add vue cookies
+app.use(VueCookies, {
+  expireTimes: '1d',
+  path: '/',
+  secure: true
+});
 // add profile API
 app.provide("$profileAPI", ProfileAPI);
 // add event emitter
