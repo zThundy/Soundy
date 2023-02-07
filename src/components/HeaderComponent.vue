@@ -7,12 +7,12 @@
     </div>
     <div class="profile-container">
       <div class="multitext-container">
-        <span class="profile-name">{{ profile.name }}</span>
-        <div class="profile-edit">
+        <span class="profile-name" @click="click('url')">{{ profile.name }}</span>
+        <div class="profile-edit"  @click="click('url')">
           <font-awesome-icon class="icon" icon="pencil" /> Account
         </div>
       </div>
-      <img src="/assets/zThundy.png" />
+      <img src="/assets/zThundy.png"  @click="click('pic')" />
     </div>
   </div>
 </template>
@@ -25,6 +25,26 @@ export default {
     return {
       profile: this.$profileAPI.getCachedProfile(),
     };
+  },
+
+  methods: {
+    click(type) {
+      switch(type) {
+        case "url":
+          this.$router.push("/dashboard/" + this.profile.username + "/settings");
+          break;
+        case "pic":
+          this.$router.push("/dashboard/" + this.profile.username + "/settings");
+          this.$refs["pfp-container"].scrollIntoView({ behavior: "smooth" });
+          break;
+      }
+    }
+  },
+
+  watch: {
+    $route() {
+      this.profile = this.$profileAPI.getCachedProfile();
+    },
   },
 };
 </script>

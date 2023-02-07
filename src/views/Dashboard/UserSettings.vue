@@ -13,6 +13,12 @@
         maxlength="50"
         placeholder="Type the description of your sound file (max 50)"
       />
+
+      <div class="pfp-container" ref="pfp-container">
+        <img :src="profile.profilePicture" />
+        <font-awesome-icon class="faicon" icon="camera" />
+      </div>
+      
       <div class="refresh-button" @click="saveProfile()">
         <span><font-awesome-icon icon="floppy-disk" /> Save</span>
       </div>
@@ -88,5 +94,47 @@ export default {
   outline: none;
   background-color: rgb(90, 90, 90);
   box-shadow: 0 0 5px 0 rgb(255, 255, 255);
+}
+
+.pfp-container {
+  width: 100%;
+  /* margin: auto; */
+  margin-top: 30px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.pfp-container img {
+  transition: all 0.1s ease-in-out;
+  object-fit: cover;
+  width: 150px;
+  height: 150px;
+  border-radius: 15px;
+  border: 3px solid white;
+  margin: auto;
+  cursor: pointer;
+  box-shadow: 0 0 2px 0 rgb(255, 255, 255);
+  background-color: black;
+}
+
+.pfp-container img:hover {
+  transition: all 0.1s ease-in-out;
+  box-shadow: 0 0 10px 0 rgb(255, 255, 255);
+  opacity: 0.6;
+}
+
+.faicon {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2em;
+  color: rgb(255, 255, 255);
+}
+
+/* show faicon on hover of img */
+.pfp-container img:hover + .faicon {
+  display: block;
 }
 </style>

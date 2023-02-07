@@ -1,6 +1,29 @@
+<template>
+  <div class="container">
+    <div class="img-container">
+      <img src="/assets/logoname-500x500.png" />
+    </div>
+
+    <div id="form">
+      <label>USERNAME <span>*</span></label>
+      <input type="text" id="username" v-model.trim="username" />
+      <label style="margin-top: 6%">PASSWORD <span>*</span></label>
+      <input type="password" id="password" v-model.trim="password" />
+      <div class="text">
+        <router-link class="a" to="/forgot">Forgot your password?</router-link>
+      </div>
+      <button type="submit" v-on:click="login">Log In</button>
+      <div class="text">
+        Need an account?
+        <router-link class="a" to="/register">Register</router-link>
+      </div>
+    </div>
+  </div>
+</template>
+
 <script>
 export default {
-  inject: ["$emitter"],
+  inject: ["$emitter", "$profileAPI"],
   data() {
     return {
       username: "",
@@ -26,11 +49,22 @@ export default {
         });
         return;
       }
-      this.$emitter.emit("notif", {
-        message: "Logged in successfully. Redirecting...",
-        type: "success",
-      });
-      this.$router.push("/dashboard/:" + this.username);
+      this.$profileAPI.tryLogin(this.username, this.password)
+        .then(response => {
+          if (response.status === 200) {
+            this.$emitter.emit("notif", {
+              message: "Logged in successfully. Redirecting...",
+              type: "success",
+            });
+            this.$router.push("/dashboard/:" + this.username);
+          } else {
+            this.$emitter.emit("notif", {
+              message: "Login failed. Please try again",
+              type: "error",
+              time: 2000,
+            });
+          }
+        });
     },
 
     // add function that checks if email is valid wirh regex
@@ -42,29 +76,6 @@ export default {
   },
 };
 </script>
-
-<template>
-  <div class="container">
-    <div class="img-container">
-      <img src="/assets/logoname-500x500.png" />
-    </div>
-
-    <div id="form">
-      <label>USERNAME <span>*</span></label>
-      <input type="text" id="username" v-model.trim="username" />
-      <label style="margin-top: 6%">PASSWORD <span>*</span></label>
-      <input type="password" id="password" v-model.trim="password" />
-      <div class="text">
-        <router-link class="a" to="/forgot">Forgot your password?</router-link>
-      </div>
-      <button type="submit" v-on:click="login">Log In</button>
-      <div class="text">
-        Need an account?
-        <router-link class="a" to="/register">Register</router-link>
-      </div>
-    </div>
-  </div>
-</template>
 
 <style scoped>
 .container {
