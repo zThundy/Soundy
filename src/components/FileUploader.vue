@@ -13,16 +13,21 @@
     >
       <label for="file-input" class="file-input-label">
         <span v-if="dropZoneActive">
-          <span><font-awesome-icon :icon="computeIcon()" /></span>
+          <span>
+            <font-awesome-icon v-if="computeIcon() !== 'spinner'" :icon="computeIcon()" />
+            <font-awesome-icon v-else :icon="computeIcon()" spin />
+          </span>
           <span class="smaller">
-            Release <strong><em>here</em></strong> to upload the file
+            Release <em><b style="font-size: 1.5em;">here</b></em> to upload the file
           </span>
         </span>
         <span v-else>
-          <span><font-awesome-icon :icon="computeIcon()" /></span>
+          <span>
+            <font-awesome-icon v-if="computeIcon() !== 'spinner'" :icon="computeIcon()" />
+            <font-awesome-icon v-else :icon="computeIcon()" spin />
+          </span>
           <span class="smaller">
-            Drag Your Files Here or <strong><em>click here</em></strong> to
-            select files
+            <em><b style="font-size: 1.5em;">Drag</b></em> your audio files here or <em><b style="font-size: 1.5em;">click</b></em> to upload
           </span>
         </span>
 
@@ -52,23 +57,17 @@
 // Components
 import DropZone from "./DropZone.vue";
 // File Management
-import useFileList from "../compositions/file-list";
-// Uploader
-import createUploader from "../compositions/file-uploader";
+import useFileList from "../apis/FileManagerAPI.js";
 
-const { file, addFile, removeFile } = useFileList();
+const { file, addFile, removeFile, uploadFile } = useFileList();
 function onInputChange(e) {
   /* check if there are more than one file added, if so pick last one */
   addFile(e.target.files);
   e.target.value = null; // reset so that selecting the same file again will still cause it to fire this change
 }
 
-const { uploadFile } = createUploader(
-  "https://discord.com/api/webhooks/1071101423242182696/VhL9eFJ_RiOS293nnW2MUjj0IYwPo42YKRY9bjFkwr8lx4mjLx2HUpgQsN1dTPqvmtTb"
-);
-
 export default {
-  inject: ["$emitter"],
+  inject: ["$emitter", "$profileAPI"],
   components: { DropZone },
   setup() {
     return {
@@ -76,7 +75,7 @@ export default {
       addFile,
       removeFile,
       onInputChange,
-      uploadFile,
+      uploadFile
     };
   },
 
@@ -122,7 +121,8 @@ export default {
         });
       }
       e.srcElement.disabled = true;
-      this.uploadFile(this.file);
+      const userId = this.$profileAPI.getUserId();
+      this.uploadFile(this.file, userId);
     },
   },
 };

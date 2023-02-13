@@ -4,7 +4,6 @@ export default function () {
   const file = ref([]);
 
   function addFile(newFiles) {
-    console.log(newFiles);
     if (newFiles.length > 0) {
       file.value = new UploadableFile(newFiles[0]);
     }
@@ -14,8 +13,23 @@ export default function () {
     file.value = [];
   }
 
-  return { file, addFile, removeFile };
+  async function uploadFile(file, userId) {
+    const url = `/api/users/${userId}/profilePicture`;
+    // set up the request data
+    let formData = new FormData();
+    formData.append("file", file.file);
+    // track status and upload file
+    file.status = "loading";
+    let response = await fetch(url, { method: "POST", body: formData });
+    // change status to indicate the success of the upload request
+    file.status = response.ok ? "success" : "error";
+    console.log(response);
+    return response;
+  }
+
+  return { file, addFile, removeFile, uploadFile };
 }
+
 
 class UploadableFile {
   constructor(file) {

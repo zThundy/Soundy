@@ -3,7 +3,10 @@ import { log } from "../compositions/Logger.js";
 class ProfileAPI {
   constructor() {
     if (process.env.NODE_ENV === "development" && true) {
+      this.profileBaseAPIUrl = "https://localhost:52150/profile/";
+
       this.profileInfo = {
+        id: "dsdshdjs",
         name: "zThundy__",
         email: "test@example.com",
         profilePicture:
@@ -13,6 +16,10 @@ class ProfileAPI {
       this.profileInfo = null;
     }
     localStorage.setItem('profileInfo', JSON.stringify(this.profileInfo));
+  }
+  
+  getUserId() {
+    return this.profileInfo?.id;
   }
 
   getCachedProfile() {
@@ -57,19 +64,20 @@ class ProfileAPI {
   async tryLogin(data) {
     return new Promise((resolve, reject) => {
       const { email, password } = data;
-      fetch("/api/login", {
+      fetch(this.profileBaseAPIUrl + "login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Basic " + btoa(email + ":" + password)
+          "Authorization": "Basic " + btoa(email + ":" + password),
         },
       })
       .then((response) => {
+        console.log(response);
         resolve(response.status);
         if (response.ok) return response.json();
-        throw new Error("Network response was not ok.");
       })
       .then((data) => {
+        console.log("Success:", data)
         this.saveProfile(data);
       })
       .catch((error) => {
