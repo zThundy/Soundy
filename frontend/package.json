@@ -14,9 +14,10 @@
     "@fortawesome/free-regular-svg-icons": "^6.2.1",
     "@fortawesome/free-solid-svg-icons": "^6.2.1",
     "@fortawesome/vue-fontawesome": "^3.0.3",
+    "fs": "^0.0.1-security",
     "sass": "^1.58.0",
     "tiny-emitter": "^2.1.0",
-    "vue": "^3.2.45",
+    "vue": "^3.2.47",
     "vue-router": "^4.1.6",
     "vue3-cookies": "^1.0.6"
   },

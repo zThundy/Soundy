@@ -52,20 +52,13 @@
         </a>
       </div>
     </div>
-
-    <!-- <div style="justify-content: flex-end; height: 10%;" class="elem-container">
-      <div class="elem">
-        <font-awesome-icon icon="fa-brands fa-github" />
-        <font-awesome-icon icon="fa-brands fa-twitch" />
-        <font-awesome-icon icon="fa-brands fa-twitter" />
-      </div>
-    </div> -->
   </div>
 </template>
 
 <script>
 // import { watch } from "vue";
 import { useRoute /* useRouter */ } from "vue-router";
+import { useCookies } from "vue3-cookies";
 
 export default {
   name: "SideMenu",
@@ -106,6 +99,7 @@ export default {
           color: "rgb(255, 0, 0)",
         },
       ],
+      $cookies: useCookies()
     };
   },
 
@@ -159,7 +153,8 @@ export default {
         if (this.collapsed) element.icon = "arrow-right";
         else element.icon = "arrow-left";
       } else if (element.text === "Log out") {
-        // this.$cookies.remove("token");
+        console.log("logged out")
+        this.$cookies.remove("userId");
         this.$router.push("/");
       }
     },

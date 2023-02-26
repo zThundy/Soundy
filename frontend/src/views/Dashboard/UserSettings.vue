@@ -102,6 +102,7 @@ export default {
   margin-top: 30px;
   margin-bottom: 30px;
   text-align: center;
+  z-index: 1;
 }
 
 .pfp-container img {
@@ -120,7 +121,7 @@ export default {
 .pfp-container img:hover {
   transition: all 0.1s ease-in-out;
   box-shadow: 0 0 10px 0 rgb(255, 255, 255);
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
 .faicon {
@@ -129,8 +130,9 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 2em;
-  color: rgb(255, 255, 255);
+  font-size: 2.5em;
+  color: rgb(0, 0, 0);
+  z-index: -1;
 }
 
 /* show faicon on hover of img */

@@ -1,9 +1,12 @@
 <script>
+import { useCookies } from 'vue3-cookies';
+
 export default {
   inject: ["$emitter"],
   data() {
     return {
       email: "",
+      $cookies: useCookies()
     };
   },
 
@@ -28,6 +31,13 @@ export default {
       return re.test(String(email).toLowerCase());
     },
   },
+
+  mounted() {
+    const userid = this.$cookies.get("userId");
+    if (userid) {
+      this.$router.push("/dashboard/" + userid);
+    }
+  }
 };
 </script>
 

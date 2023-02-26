@@ -3,7 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 import ProfileAPI from "./apis/ProfileGetterAPI.js";
 import emitter from "tiny-emitter/instance";
-import VueCookies from 'vue3-cookies'
+import VueCookies from 'vue3-cookies';
 
 import "./assets/main.css";
 import "./assets/buttons.css";
@@ -103,7 +103,7 @@ app.use(router);
 // add vue cookies
 app.use(VueCookies, {
   expireTimes: '1d',
-  path: '/',
+  // path: '/',
   secure: true
 });
 // add profile API

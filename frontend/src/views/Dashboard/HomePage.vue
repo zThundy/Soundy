@@ -33,6 +33,7 @@
 import SideMenu from "../../components/SideMenu.vue";
 import HeaderComponent from "../../components/HeaderComponent.vue";
 import FileUploader from "../../components/FileUploader.vue";
+import { useCookies } from 'vue3-cookies';
 
 export default {
   name: "HomePage",
@@ -41,6 +42,7 @@ export default {
   data() {
     return {
       uploaderActive: false,
+      $cookies: useCookies()
     };
   },
 
@@ -54,6 +56,10 @@ export default {
   },
 
   mounted() {
+    const userid = this.$cookies.get("userId");
+    if (!userid) return this.$router.push("/");
+    // TODO: check if the userid in cookies actually exist
+
     this.$emitter.on("toggle-uploader", (bool) => {
       if (!bool) {
         this.uploaderActive = !this.uploaderActive;

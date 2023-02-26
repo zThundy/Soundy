@@ -1,58 +1,86 @@
+<template>
+  <div class="container">
+    <div class="img-container">
+      <img src="/assets/logoname-500x500.png" />
+    </div>
+
+    <div id="form">
+      <label>EMAIL <span>*</span></label>
+      <input type="text" id="username" v-model.trim="username" />
+      <label style="margin-top: 6%">PASSWORD <span>*</span></label>
+      <input type="password" id="password" v-model.trim="password" />
+      <div class="text">
+        <router-link class="a" to="/forgot">Forgot your password?</router-link>
+      </div>
+      <button type="submit" v-on:click="login">Log In</button>
+      <div class="text">
+        Need an account?
+        <router-link class="a" to="/register">Register</router-link>
+      </div>
+    </div>
+  </div>
+</template>
+
 <script>
+import { useCookies } from "vue3-cookies";
+
 export default {
-  inject: ["$emitter"],
+  inject: ["$emitter", "$profileAPI"],
   data() {
     return {
-      username: "",
-      email: "",
-      password: "",
-      repeatPassword: "",
+      username: "ahsdjhajs@dashdjas.cjjc",
+      password: "daskjfdjkfd",
+      $cookies: useCookies()
     };
   },
 
   methods: {
-    register() {
-      if (
-        this.username.length === 0 ||
-        this.email.length === 0 ||
-        this.password.length === 0 ||
-        this.repeatPassword.length === 0
-      ) {
+    login() {
+      if (this.username.length === 0 || this.password.length === 0) {
         this.$emitter.emit("notif", {
-          message: "Please fill in all fields to create an account",
+          message: "Please fill in all fields to login",
           type: "error",
-          time: 1000,
+          time: 2000,
         });
         return;
       }
-      if (!this.isEmailValid(this.email)) {
+      if (!this.isEmailValid(this.username)) {
         this.$emitter.emit("notif", {
           message: "Please enter a valid email address",
           type: "error",
-          time: 1000,
+          time: 2000,
         });
         return;
       }
-      if (this.isEmailValid(this.username)) {
-        this.$emitter.emit("notif", {
-          message: "Please enter a valid username",
-          type: "error",
-          time: 1000,
-        });
-        return;
+
+      // check if the user is already logged in
+      const userid = this.$cookies.get("userId");
+      if (userid) {
+        this.$router.push("/dashboard/" + userid);
+      } else {
+        // make an api call to the server
+        this.$profileAPI.tryLogin({ username: this.username, password: this.password })
+          .then(response => {
+            // listen to the response
+            if (response.status === 200) {
+              this.$emitter.emit("notif", {
+                message: "Logged in successfully. Redirecting...",
+                type: "success",
+              });
+              // set the userid value in the local storage with expire of 1 month
+              this.$cookies.set("userId", response.body.value);
+              // then push with the new userid
+              this.$router.push("/dashboard/" + response.body.value);
+            }
+          })
+          .catch(e => {
+            this.$emitter.emit("notif", {
+              message: e,
+              type: "error",
+              time: 3000,
+            });
+          });
       }
-      if (this.password !== this.repeatPassword) {
-        this.$emitter.emit("notif", {
-          message: "Passwords do not match",
-          type: "error",
-          time: 1000,
-        });
-        return;
-      }
-      this.$emitter.emit("notif", {
-        message: "Account created successfully",
-        type: "success",
-      });
     },
 
     // add function that checks if email is valid wirh regex
@@ -62,43 +90,15 @@ export default {
       return re.test(String(email).toLowerCase());
     },
   },
+
+  mounted() {
+    const userid = this.$cookies.get("userId");
+    if (userid) {
+      this.$router.push("/dashboard/" + userid);
+    }
+  }
 };
 </script>
-
-<template>
-  <div class="container">
-    <div class="img-container">
-      <img src="/assets/logoname-500x500.png" />
-    </div>
-
-    <div class="form-cotainer">
-      <div id="form">
-        <label>USERNAME <span>*</span></label>
-        <input type="text" id="username" v-model.trim="username" />
-        <label style="margin-top: 8%">EMAIL <span>*</span></label>
-        <input type="text" id="email" v-model.trim="email" />
-      </div>
-
-      <div class="divider"></div>
-
-      <div id="form">
-        <label>PASSWORD <span>*</span></label>
-        <input type="password" id="password" v-model.trim="password" />
-        <label style="margin-top: 8%">REPEAT PASSWORD <span>*</span></label>
-        <input
-          type="password"
-          id="repeatPassword"
-          v-model.trim="repeatPassword"
-        />
-      </div>
-    </div>
-
-    <button type="submit" v-on:click="register">Register</button>
-    <div class="text">
-      Already have an account? <router-link class="a" to="/">Login</router-link>
-    </div>
-  </div>
-</template>
 
 <style scoped>
 .container {
@@ -115,10 +115,10 @@ export default {
   align-items: center;
   justify-content: center;
 
-  width: 1500px;
-  height: 700px;
-  min-width: 1500px;
-  min-height: 700px;
+  width: 672px;
+  height: 702px;
+  min-width: 672px;
+  min-height: 702px;
 
   animation: showAnim 0.5s ease-in-out;
   animation-fill-mode: forwards;
@@ -131,15 +131,6 @@ export default {
   100% {
     opacity: 1;
   }
-}
-
-.form-cotainer {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
 }
 
 .img-container {
@@ -167,12 +158,6 @@ img {
   align-items: center;
 }
 
-.divider {
-  width: 1px;
-  height: 80%;
-  background-color: rgb(77, 77, 77);
-}
-
 /* align label element on left side of input */
 label {
   align-self: flex-start;
@@ -189,10 +174,12 @@ label span {
 }
 
 .text {
+  /* put content on same line */
   width: 80%;
   margin-top: 1%;
-  margin-bottom: 2%;
-  text-align: center;
+  margin-bottom: 6%;
+  align-self: flex-start;
+  margin-left: 10%;
 }
 
 /* make link purple and align it to left side under last input */
@@ -249,9 +236,8 @@ button {
   background-color: rgb(180, 0, 190);
   color: rgba(255, 255, 255, 1);
   padding: 5px;
-  width: 40%;
-  height: 15%;
-  margin-top: 2%;
+  width: 80%;
+  height: 30%;
 
   /* add black shadow behind */
   box-shadow: 0 0 5px 0 hsl(220, calc(1 * 7.7%), 15%);

@@ -61,29 +61,38 @@ class ProfileAPI {
 
   }
 
-  async tryLogin(data) {
-    return new Promise((resolve, reject) => {
-      const { email, password } = data;
-      fetch(this.profileBaseAPIUrl + "login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Basic " + btoa(email + ":" + password),
-        },
-      })
-      .then((response) => {
+  tryLogin(data) {
+    return new Promise(async (resolve, reject) => {
+      const { username, password } = data;
+      console.log(btoa(username + ":" + password))
+      try {
+        const response = await fetch(this.profileBaseAPIUrl + "login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Basic " + btoa(username + ":" + password),
+          },
+          // mode: "no-cors",
+          // body: JSON.stringify(data)
+        })
+        
         console.log(response);
-        resolve(response.status);
-        if (response.ok) return response.json();
-      })
-      .then((data) => {
-        console.log("Success:", data)
-        this.saveProfile(data);
-      })
-      .catch((error) => {
-        console.error("There has been a problem with your fetch operation:", error);
-      });
+        if (response.ok) {
+          const data = response.json();
+          resolve(response.status);
+          this.saveProfile(data);
+        } else if (response.status === 404) {
+          reject("User not found, please check the email or register a new user");
+        }
+      } catch(e) {
+        console.error("There has been a problem with your fetch operation:", e);
+        reject("There has been a problem with your fetch operation:", e);
+      }
     });
+  }
+
+  tryRegister(data) {
+
   }
 }
 

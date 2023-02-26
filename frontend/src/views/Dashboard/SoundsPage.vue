@@ -6,7 +6,7 @@
         v-bind:key="sound.id"
         @click="selectSound(sound)"
         class="sound"
-        :class="{ 'sound-selected': sound === selectedSound }"
+        :class="{ 'sound-selected': sound.id === (selectedSound ? selectedSound.id : '') }"
       >
         <span class="title">{{ computeStringLength(sound.name, 60) }}</span>
         <span class="description"
