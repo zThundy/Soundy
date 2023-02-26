@@ -6,23 +6,19 @@
 
     <div class="form-cotainer">
       <div id="form">
-        <label>USERNAME <span>*</span></label>
-        <input type="text" id="username" v-model.trim="username" />
-        <label style="margin-top: 8%">EMAIL <span>*</span></label>
+        <label style="margin-top: 2%">EMAIL <span>*</span></label>
         <input type="text" id="email" v-model.trim="email" />
+        <label style="margin-top: 8%">REPEAT EMAIL <span>*</span></label>
+        <input type="text" id="email" v-model.trim="remail" />
       </div>
 
       <div class="divider"></div>
 
       <div id="form">
-        <label>PASSWORD <span>*</span></label>
+        <label style="margin-top: 2%">PASSWORD <span>*</span></label>
         <input type="password" id="password" v-model.trim="password" />
         <label style="margin-top: 8%">REPEAT PASSWORD <span>*</span></label>
-        <input
-          type="password"
-          id="repeatPassword"
-          v-model.trim="repeatPassword"
-        />
+        <input type="password" id="repeatPassword" v-model.trim="repeatPassword" />
       </div>
     </div>
 
@@ -40,10 +36,10 @@ export default {
   inject: ["$emitter"],
   data() {
     return {
-      username: "",
       email: "",
       password: "",
       repeatPassword: "",
+      remail: "",
       $cookies: useCookies()
     };
   },
@@ -51,46 +47,50 @@ export default {
   methods: {
     register() {
       if (
-        this.username.length === 0 ||
+        this.remail.length === 0 ||
         this.email.length === 0 ||
         this.password.length === 0 ||
         this.repeatPassword.length === 0
       ) {
-        this.$emitter.emit("notif", {
+        return this.$emitter.emit("notif", {
           message: "Please fill in all fields to create an account",
           type: "error",
           time: 1000,
         });
-        return;
       }
-      if (!this.isEmailValid(this.email)) {
-        this.$emitter.emit("notif", {
+      if (!this.isEmailValid(this.email) || !this.isEmailValid(this.remail)) {
+        return this.$emitter.emit("notif", {
           message: "Please enter a valid email address",
           type: "error",
           time: 1000,
         });
-        return;
       }
       if (this.isEmailValid(this.username)) {
-        this.$emitter.emit("notif", {
+        return this.$emitter.emit("notif", {
           message: "Please enter a valid username",
           type: "error",
           time: 1000,
         });
-        return;
       }
-      if (this.password !== this.repeatPassword) {
-        this.$emitter.emit("notif", {
+      if (this.password !== this.rpassword) {
+        return this.$emitter.emit("notif", {
           message: "Passwords do not match",
           type: "error",
           time: 1000,
         });
-        return;
       }
-      this.$emitter.emit("notif", {
-        message: "Account created successfully",
-        type: "success",
-      });
+      // make an api call to the server
+      this.$profileAPI.tryRegister({ email: this.email, remail: this.remail, password: this.password, rpassword: this.rpassword })
+        .then(response => {
+          
+        })
+        .catch(e => {
+          this.$emitter.emit("notif", {
+            message: e,
+            type: "error",
+            time: 5000,
+          });
+        });
     },
 
     // add function that checks if email is valid wirh regex
@@ -103,9 +103,7 @@ export default {
 
   mounted() {
     const userid = this.$cookies.get("userId");
-    if (userid) {
-      this.$router.push("/dashboard/" + userid);
-    }
+    if (userid) this.$router.push("/dashboard/" + userid);
   }
 };
 </script>
@@ -125,10 +123,10 @@ export default {
   align-items: center;
   justify-content: center;
 
-  width: 1500px;
-  height: 700px;
-  min-width: 1500px;
-  min-height: 700px;
+  width: 1300px;
+  height: 600px;
+  min-width: 1300px;
+  min-height: 600px;
 
   animation: showAnim 0.5s ease-in-out;
   animation-fill-mode: forwards;
@@ -170,7 +168,7 @@ img {
 }
 
 #form {
-  height: 70%;
+  height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -231,7 +229,7 @@ input {
   color: hsl(220, calc(1 * 7.7%), 80%);
   padding: 5px;
   width: 80%;
-  height: 30%;
+  height: 55px;
 
   /* add black shadow behind */
   box-shadow: 0 0 5px 0 hsl(220, calc(1 * 7.7%), 15%);

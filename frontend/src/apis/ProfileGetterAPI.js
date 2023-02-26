@@ -64,7 +64,6 @@ class ProfileAPI {
   tryLogin(data) {
     return new Promise(async (resolve, reject) => {
       const { username, password } = data;
-      console.log(btoa(username + ":" + password))
       try {
         const response = await fetch(this.profileBaseAPIUrl + "login", {
           method: "POST",
@@ -72,11 +71,8 @@ class ProfileAPI {
             "Content-Type": "application/json",
             "Authorization": "Basic " + btoa(username + ":" + password),
           },
-          // mode: "no-cors",
-          // body: JSON.stringify(data)
         })
         
-        console.log(response);
         if (response.ok) {
           const data = response.json();
           resolve(response.status);
@@ -92,7 +88,24 @@ class ProfileAPI {
   }
 
   tryRegister(data) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await fetch(this.profileBaseAPIUrl + "register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data)
+        })
 
+        if (response.ok) {
+          const data = response.json();
+        }
+      } catch(e) {
+        console.error("There has been a problem with your fetch operation:", e);
+        reject("There has been a problem with your fetch operation:", e);
+      }
+    })
   }
 }
 

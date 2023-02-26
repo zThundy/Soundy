@@ -77,7 +77,7 @@ export default {
             this.$emitter.emit("notif", {
               message: e,
               type: "error",
-              time: 3000,
+              time: 5000,
             });
           });
       }
@@ -93,9 +93,7 @@ export default {
 
   mounted() {
     const userid = this.$cookies.get("userId");
-    if (userid) {
-      this.$router.push("/dashboard/" + userid);
-    }
+    if (userid) this.$router.push("/dashboard/" + userid);
   }
 };
 </script>

@@ -13,20 +13,15 @@ router.get('/', (req, res) => {
 });
 
 router.post('/login', (req, res) => {
-    console.log("Got login");
-    console.log(req.headers);
-    console.log(req.body);
     const authData = atob(req.headers["authorization"].split("Basic ")[1]).split(":");
     const email = authData[0];
     const password = authData[1];
-    console.log(authData, email, password)
     req.database.checkIfUserExist(email)
         .then(user => {
             // check user credentials
             console.log(user);
         })
         .catch(e => {
-            console.log("no user")
             res.status(404).send(e).end();
         })
 });
