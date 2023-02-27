@@ -22,7 +22,7 @@ export default {
     return {
       // cookiePolicy: this.$cookies.get('cookie-policy'),
       /* if in dev mode then accepted: true */
-      accepted: process.env.NODE_ENV === "development" ? true : false,
+      accepted: process.env.NODE_ENV === "development" ? true : false
     };
   },
 

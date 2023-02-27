@@ -23,15 +23,17 @@ export default {
     login() {
       this.$profileAPI.tryLogin()
         .then(response => {
-          window.open(response.url);
+          window.open(response);
         })
         .catch(e => {
+          console.log(e);
           this.$emitter.emit("notif", {
             message: e,
             type: "error",
             time: 5000,
           });
         });
+      window.open()
     },
 
     // add function that checks if email is valid wirh regex

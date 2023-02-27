@@ -1,8 +1,9 @@
+import { createPinia } from 'pinia'
 import { createSSRApp } from 'vue'
 import App from "./App.vue";
 import router from "./router/index.js";
 import ProfileAPI from "./apis/ProfileGetterAPI.js";
-import emitter from "tiny-emitter/instance.js";
+import emitter from "tiny-emitter/instance";
 
 import "./assets/main.css";
 import "./assets/buttons.css";
@@ -98,6 +99,9 @@ export function createApp() {
   const app = createSSRApp(App).component("font-awesome-icon", FontAwesomeIcon);
   // add vue router component
   app.use(router);
+  // add pinia for store
+  const pinia = createPinia()
+  app.use(pinia)
   // add profile API
   app.provide("$profileAPI", ProfileAPI);
   // add event emitter

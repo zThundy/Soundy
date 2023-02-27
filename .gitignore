@@ -8,8 +8,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-backend/node_modules
-backend/modules/twitch.json
+src/apis/twitch.json
 .DS_Store
 dist
 dist-ssr

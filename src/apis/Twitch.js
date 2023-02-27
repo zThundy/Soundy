@@ -1,13 +1,17 @@
-const https = require("https");
+import https from "https";
 
 // this class manages the twitch websocket connection
 class TwitchAPI {
     constructor(tokens) {
-        this.config = require("../config.json");
         // this.accessLink = "https://id.twitch.tv/oauth2/token?client_id={0}&client_secret={1}&code={2}&grant_type=authorization_code&redirect_uri={3}"
         this.accessToken = tokens.accessToken;
         this.refreshToken = tokens.refreshToken;
         this.sessionToken = tokens.sessionToken;
+        this._cfg();
+    }
+
+    async _cfg() {
+        this.config = await import("./twitch.json");
     }
 
     // this function returns the access token
@@ -64,4 +68,4 @@ class TwitchAPI {
     }
 }
 
-module.exports = TwitchAPI;
+export default TwitchAPI;
