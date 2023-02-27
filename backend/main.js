@@ -1,3 +1,12 @@
+if (!String.prototype.format) {
+    String.prototype.format = function() {
+        var args = arguments;
+        return this.replace(/{(\d+)}/g, function(match, number) {
+            return typeof args[number] != 'undefined' ? args[number] : match;
+        });
+    };
+}
+
 const fs = require('fs');
 const https = require("https");
 const express = require('express');
@@ -8,7 +17,7 @@ const bodyParser = require('body-parser')
 
 // custom modules
 const Database = require("./modules/database.js");
-const database = new Database()
+const database = new Database();
 database.init();
 
 // express middlewares

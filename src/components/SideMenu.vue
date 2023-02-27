@@ -58,7 +58,6 @@
 <script>
 // import { watch } from "vue";
 import { useRoute /* useRouter */ } from "vue-router";
-import { useCookies } from "vue3-cookies";
 
 export default {
   name: "SideMenu",
@@ -99,7 +98,6 @@ export default {
           color: "rgb(255, 0, 0)",
         },
       ],
-      $cookies: useCookies()
     };
   },
 
@@ -154,7 +152,6 @@ export default {
         else element.icon = "arrow-left";
       } else if (element.text === "Log out") {
         console.log("logged out")
-        this.$cookies.remove("userId");
         this.$router.push("/");
       }
     },
@@ -167,7 +164,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .menu-container {
   user-select: none;
   overflow: hidden;

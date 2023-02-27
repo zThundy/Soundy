@@ -1,9 +1,8 @@
-import { createApp } from "vue";
+import { createSSRApp } from 'vue'
 import App from "./App.vue";
-import router from "./router";
+import router from "./router/index.js";
 import ProfileAPI from "./apis/ProfileGetterAPI.js";
-import emitter from "tiny-emitter/instance";
-import VueCookies from 'vue3-cookies';
+import emitter from "tiny-emitter/instance.js";
 
 import "./assets/main.css";
 import "./assets/buttons.css";
@@ -95,20 +94,14 @@ library.add(
 //     library.add(Icons[icon]);
 // }
 
-// create the application adding all the components
-const app = createApp(App).component("font-awesome-icon", FontAwesomeIcon);
-
-// add vue router component
-app.use(router);
-// add vue cookies
-app.use(VueCookies, {
-  expireTimes: '1d',
-  // path: '/',
-  secure: true
-});
-// add profile API
-app.provide("$profileAPI", ProfileAPI);
-// add event emitter
-app.provide("$emitter", emitter);
-// mount the app
-app.mount("#app");
+export function createApp() {
+  const app = createSSRApp(App).component("font-awesome-icon", FontAwesomeIcon);
+  // add vue router component
+  app.use(router);
+  // add profile API
+  app.provide("$profileAPI", ProfileAPI);
+  // add event emitter
+  app.provide("$emitter", emitter);
+  // return values
+  return { app, router }
+}
