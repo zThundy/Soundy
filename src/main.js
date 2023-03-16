@@ -5,6 +5,25 @@ import router from "./router/index.js";
 import ProfileAPI from "./apis/ProfileGetterAPI.js";
 import emitter from "tiny-emitter/instance";
 
+// Vuetify
+import 'vuetify/styles'
+import 'vuetify/iconsets/mdi'
+import { createVuetify } from 'vuetify'
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
+
+const vuetify = createVuetify({
+  components,
+  directives,
+  ssr: true,
+  icons: {
+    defaultSet: 'mdi'
+  },
+  theme: {
+    defaultTheme: 'dark'
+  }
+})
+
 import "./assets/main.css";
 import "./assets/buttons.css";
 
@@ -106,6 +125,8 @@ export function createApp() {
   app.provide("$profileAPI", ProfileAPI);
   // add event emitter
   app.provide("$emitter", emitter);
+  // ad vuetify
+  app.use(vuetify);
   // return values
   return { app, router }
 }

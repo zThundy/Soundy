@@ -1,5 +1,3 @@
-import { log } from "../compositions/Logger.js";
-
 var sounds = null;
 if (process.env.NODE_ENV === "development" && true) {
   sounds = [

@@ -23,7 +23,7 @@ export default {
   inject: ["$profileAPI"],
   data() {
     return {
-      profile: this.$profileAPI.getCachedProfile(),
+      profile: this.$profileAPI.getProfile(),
     };
   },
 
@@ -43,7 +43,7 @@ export default {
 
   watch: {
     $route() {
-      this.profile = this.$profileAPI.getCachedProfile();
+      this.profile = this.$profileAPI.getProfile();
     },
   },
 };

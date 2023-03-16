@@ -10,8 +10,8 @@
     </div>
 
     <div class="button-container">
-      <button class="accept-button" @click="acceptCookies">Accept</button>
-      <button class="decline-button" @click="declineCookies">Decline</button>
+      <v-btn style="margin: auto;" color="success" @click="acceptCookies"><v-icon style="margin-right: 10px" icon="mdi-check-circle" />Accept</v-btn>
+      <v-btn style="margin: auto;" color="red" @click="declineCookies"><v-icon style="margin-right: 10px" icon="mdi-close-circle" />Decline</v-btn>
     </div>
   </div>
 </template>
@@ -22,7 +22,8 @@ export default {
     return {
       // cookiePolicy: this.$cookies.get('cookie-policy'),
       /* if in dev mode then accepted: true */
-      accepted: process.env.NODE_ENV === "development" ? true : false
+      // accepted: process.env.NODE_ENV === "development" ? true : false
+      accepted: false
     };
   },
 
@@ -120,7 +121,7 @@ export default {
   display: flex;
   flex-direction: row;
   margin-top: 10px;
-  height: 4vh;
+  height: 5vh;
   margin-top: 2vh;
 }
 </style>

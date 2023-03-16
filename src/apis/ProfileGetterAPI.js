@@ -1,6 +1,6 @@
 import TwitchAPI from "./Twitch";
 // const twitch = import.meta.env.SSR ? new TwitchAPI() : null;
-import { defineStore } from 'pinia'
+import { useAppStore } from '../stores/appStore';
 
 class ProfileAPI {
   constructor() {
@@ -9,7 +9,9 @@ class ProfileAPI {
     }
 
     if (import.meta.env.SSR) {
-      this._initServer();
+      const appStore = useAppStore();
+      appStore.test = "testing value";
+      console.log(appStore);
 
       if (!String.prototype.format) {
         String.prototype.format = function() {
@@ -23,17 +25,12 @@ class ProfileAPI {
   }
 
   async _initServer() {
-    const urlStore = defineStore('url-store', {
-      state: () => ({
-        url: ("https://id.twitch.tv/oauth2/authorize?client_id={0}&redirect_uri={1}&response_type=code&scope={2}").format(
-          this.config.clientId,
-          this.config.redirectUri,
-          this.config.scopes.join("+")
-        )
-      }),
-    })
     this.config = await import("./twitch.json");
-    return { urlStore }
+    this.url = ("https://id.twitch.tv/oauth2/authorize?client_id={0}&redirect_uri={1}&response_type=code&scope={2}").format(
+      this.config.clientId,
+      this.config.redirectUri,
+      this.config.scopes.join("+")
+    )
   }
 
   tryLogin() {
@@ -110,6 +107,10 @@ class ProfileAPI {
       // close the connection
       req.end();
     });
+  }
+
+  getProfile() {
+    return {}
   }
 }
 

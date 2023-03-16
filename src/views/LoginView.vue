@@ -11,43 +11,34 @@
   </div>
 </template>
 
-<script>
-export default {
-  inject: ["$emitter", "$profileAPI"],
-  data() {
-    return {
-    };
-  },
+<script lang="ts" setup>
+// import { onServerPrefetch } from 'vue';
+// import { useAppStore } from '../stores/appStore';
+// const appStore = useAppStore();
 
-  methods: {
-    login() {
-      this.$profileAPI.tryLogin()
-        .then(response => {
-          window.open(response);
-        })
-        .catch(e => {
-          console.log(e);
-          this.$emitter.emit("notif", {
-            message: e,
-            type: "error",
-            time: 5000,
-          });
-        });
-      window.open()
-    },
+// onServerPrefetch(() => {
+//   console.log("server render");
 
-    // add function that checks if email is valid wirh regex
-    isEmailValid(email) {
-      const re =
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return re.test(String(email).toLowerCase());
-    },
-  },
+//   setTimeout(() => {
+//     console.log("updating store")
+//     appStore.dataFrom = 'server';
+//     console.log(appStore)
+//   }, 5000)
+// });
 
-  mounted() {
-    console.log("mounted")
-  }
-};
+// appStore.$subscribe((mutation, state) => {
+//   console.log(mutation)
+//   console.log(state)
+  
+//   // localStorage.setItem('cart', JSON.stringify(state))
+// })
+
+function login() {
+  console.log("login")
+  // console.log(appStore.dataFrom)
+  // console.log(appStore.test)
+}
+
 </script>
 
 <style scoped>

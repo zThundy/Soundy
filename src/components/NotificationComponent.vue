@@ -1,20 +1,10 @@
 <template>
-  <div
-    v-if="currentNotif.type && currentNotif.message"
-    class="notif-container show"
-    :class="currentNotif.type"
-  >
-    <font-awesome-icon
-      v-if="currentNotif.type === 'error'"
-      id="icon"
-      icon="fa-solid fa-triangle-exclamation"
-    />
-    <font-awesome-icon
-      v-else-if="currentNotif.type === 'success'"
-      id="icon"
-      icon="fa-solid fa-check"
-    />
-    <span class="notif-container-text">{{ currentNotif.message }}</span>
+  <div v-if="currentNotif.type && currentNotif.message" class="notif-container show">
+    <v-alert
+      :type="currentNotif.type || 'info'"
+      :title="currentNotif.title || null"
+      :text="currentNotif.text"
+    ></v-alert>
   </div>
 </template>
 

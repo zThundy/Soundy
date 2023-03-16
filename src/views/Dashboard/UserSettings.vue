@@ -32,7 +32,7 @@ export default {
   inject: ["$profileAPI", "$emitter"],
   data() {
     return {
-      profile: this.$profileAPI.getCachedProfile(),
+      profile: this.$profileAPI.getProfile(),
     };
   },
 

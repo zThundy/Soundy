@@ -4,6 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "dev-ssr": "vite-ssr --open",
+    "dev-cli": "vite --open",
     "dev": "node server",
     "build:client": "vite build --outDir dist/client",
     "build:server": "vite build --outDir dist/server --ssr src/entry-server.js",
@@ -15,13 +17,16 @@
     "@fortawesome/free-regular-svg-icons": "^6.2.1",
     "@fortawesome/free-solid-svg-icons": "^6.2.1",
     "@fortawesome/vue-fontawesome": "^3.0.3",
+    "axios": "^1.3.4",
     "express": "^4.18.2",
     "fs": "^0.0.1-security",
     "pinia": "^2.0.32",
     "sass": "^1.58.0",
     "tiny-emitter": "^2.1.0",
+    "vite-ssr": "^0.17.1",
     "vue": "^3.2.47",
-    "vue-router": "^4.1.6"
+    "vue-router": "^4.1.6",
+    "vuetify": "^3.1.10"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.4",

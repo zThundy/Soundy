@@ -8,11 +8,8 @@
         class="sound"
         :class="{ 'sound-selected': sound.id === (selectedSound ? selectedSound.id : '') }"
       >
-        <span class="title">{{ computeStringLength(sound.name, 60) }}</span>
-        <span class="description"
-          ><font-awesome-icon class="icon" icon="paperclip" />
-          {{ sound.description }}</span
-        >
+        <span class="title">{{ sound.name || "No name" }}</span>
+        <!-- <span class="description"><font-awesome-icon class="icon" icon="paperclip" />{{ sound.description }}</span> -->
       </div>
     </div>
     <div class="sounds-info">
@@ -22,54 +19,48 @@
         style="width: 95%"
       >
         <div class="input-container">
-          <label class="label">Sound Name:</label>
-          <input
+          <v-text-field
+            label="Sound Name"
             v-model="selectedSound.name"
             maxlength="40"
-            placeholder="Type the name of your sound file (max 40)"
-          />
-          <label class="label">Sound Description:</label>
-          <input
+            :counter="40"
+            placeholder="Type the name of your sound file"
+            clearable
+            variant="solo"
+          ></v-text-field>
+          <v-spacer></v-spacer>
+          <v-textarea
+            label="Sound Description"
             v-model="selectedSound.description"
-            maxlength="80"
-            placeholder="Type the description of your sound file (max 80)"
-          />
-          <label class="label">Points needed:</label>
-          <input
-            type="number"
+            placeholder="Type the description of your sound file"
+            :counter="80"
+            variant="solo"
+          ></v-textarea>
+          <v-spacer></v-spacer>
+          <v-text-field
+            label="Points needed"
             v-model="selectedSound.points"
-            maxlength="80"
-            placeholder="Type the description of your sound file (max 80)"
-          />
+            type="number"
+            variant="solo"
+          ></v-text-field>
         </div>
 
         <div class="slider-container">
-          <label class="label">Volume:</label>
-          <div class="slidecontainer">
-            <input
-              v-model="selectedSound.volume"
-              type="range"
-              min="1"
-              max="100"
-              class="slider"
-            />
-            <span style="width: 50px; text-align: center"
-              >{{ selectedSound.volume }}%</span
-            >
-          </div>
+          <v-slider
+            thumb-color="purple"
+            label="Volume"
+            v-model="selectedSound.volume"
+            :min="1"
+            :max="100"
+          ></v-slider>
         </div>
 
         <div class="buttons-container">
-          <div class="save-button" @click="saveSound(selectedSound)">
-            <span
-              ><font-awesome-icon class="icon" icon="floppy-disk" /> Save</span
-            >
-          </div>
-          <div class="delete-button" @click="deleteSound(selectedSound)">
-            <span><font-awesome-icon class="icon" icon="trash" /> Delete</span>
-          </div>
+          <v-btn @click="saveSound(selectedSound)"><v-icon class="icon" icon="mdi-floppy" />Save</v-btn>
+          <v-btn @click="deleteSound(selectedSound)"><v-icon class="icon" icon="mdi-delete" />Delete</v-btn>
         </div>
       </div>
+
       <div
         v-else
         class="sound-infoes-container"
@@ -92,14 +83,6 @@
       </div>
     </div>
   </div>
-  <div v-else-if="typeof sounds === 'string'">
-    <div class="error-container">
-      <span class="error-message">{{ sounds }}</span>
-      <div class="refresh-button" @click="reload()">
-        <span><font-awesome-icon class="icon" icon="rotate" /> Refresh</span>
-      </div>
-    </div>
-  </div>
 </template>
 
 <script>
@@ -114,11 +97,9 @@ export default {
     };
   },
 
-  data() {
-    return {
-      selectedSound: null,
-    };
-  },
+  data: () => ({
+    selectedSound: null
+  }),
 
   methods: {
     selectSound(sound) {
@@ -127,15 +108,6 @@ export default {
         return;
       }
       this.selectedSound = sound;
-    },
-    computeStringLength(name, length) {
-      if (name.length === 0) {
-        return "No name";
-      }
-      if (name.length > length) {
-        return name.substring(0, length) + "...";
-      }
-      return name;
     },
     saveSound(sound) {
       // TODO: Save sound
@@ -175,57 +147,13 @@ export default {
 </script>
 
 <style>
-.error-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
-  margin: auto;
-  margin-top: 25px;
-  margin-bottom: 25px;
-  border-radius: 10px;
-}
-
-.error-message {
-  margin: auto;
-  font-size: 20px;
-  color: white;
-}
-
 .input-container {
   display: flex;
   flex-direction: column;
-  height: 250px;
   width: 92%;
   margin: auto;
   margin-top: 25px;
   border-radius: 10px;
-}
-
-.input-container input {
-  transition: all 0.1s ease-in-out;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  margin-right: auto;
-  background-color: rgb(70, 70, 70);
-  height: auto;
-  padding: 15px;
-  width: 100%;
-  border: none;
-  border-radius: 15px;
-  color: white;
-}
-
-.input-container input:hover {
-  transition: all 0.1s ease-in-out;
-  background-color: rgb(80, 80, 80);
-}
-
-.input-container input:focus {
-  transition: all 0.1s ease-in-out;
-  outline: none;
-  background-color: rgb(90, 90, 90);
-  box-shadow: 0 0 5px 0 rgb(255, 255, 255);
 }
 
 .label {
@@ -284,8 +212,6 @@ export default {
   flex-direction: column;
   margin-left: auto;
   margin-right: auto;
-  /* margin-left: 10px; */
-  transition: all 0.1s ease-in-out;
   border-radius: 10px;
   background-color: #333333;
   padding: 10px;
@@ -318,94 +244,16 @@ export default {
   margin-left: auto;
   margin-right: auto;
   margin-top: 30px;
-  border-radius: 10px;
-}
-
-.upload-button {
-  user-select: none;
-  transition: all 0.1s ease-in-out;
+  margin-bottom: 30px;
   border-radius: 10px;
   padding: 10px 15px 10px 10px;
-  /* margin-top: 10px; */
-  /* margin-bottom: 10px; */
-  background-color: rgb(180, 0, 190);
-  cursor: pointer;
-  width: fit-content;
-  color: white;
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 20px;
-}
-
-.upload-button:hover {
-  transition: all 0.1s ease-in-out;
-  background-color: rgb(176, 49, 185);
-  color: white;
 }
 
 .slider-container {
-  display: flex;
-  flex-direction: column;
-  height: auto;
-  width: 92%;
-  margin: auto;
+  justify-content: center;
+  align-content: center;
+  text-align: center;
   margin-top: 80px;
-  border-radius: 10px;
-}
-
-.slidecontainer {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  margin-top: 10px;
-}
-
-/* The slider itself */
-.slider {
-  margin-top: auto;
-  margin-bottom: auto;
-  -webkit-appearance: none;
-  appearance: none;
-  width: 90%;
-  height: 10px;
-  background: #d3d3d3;
-  outline: none;
-  opacity: 0.7;
-  -webkit-transition: 0.2s;
-  transition: opacity 0.2s;
-  border-radius: 20px;
-}
-
-/* Mouse-over effects */
-.slider:hover {
-  opacity: 1;
-}
-
-.slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 25px;
-  height: 25px;
-  background: rgb(180, 0, 190);
-  cursor: pointer;
-  border-radius: 20px;
-}
-
-.slider::-moz-range-thumb {
-  width: 25px;
-  height: 25px;
-  background: rgb(180, 0, 190);
-  cursor: pointer;
-  border-radius: 20px;
-}
-
-.slider::-webkit-slider-thumb:hover {
-  background: rgb(176, 49, 185);
-}
-
-.slider::-moz-range-thumb:hover {
-  background: rgb(176, 49, 185);
 }
 
 .no-sounds-container {
