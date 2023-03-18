@@ -1,18 +1,38 @@
 <template>
   <div class="container">
     <div class="info-container">
-      <div class="custom-button">
-        <font-awesome-icon class="icon" icon="bullhorn" />
-      </div>
+      <v-badge
+        style="margin-left: 20px;"
+        :content="2"
+        color="green"
+      >
+        <v-btn
+          color="#333333"
+          icon="mdi-bullhorn"
+        ></v-btn>
+      </v-badge>
+      
+      <v-badge
+        style="margin-left: 20px;"
+        :content="20"
+        color="red"
+      >
+        <v-btn
+          color="#333333"
+          icon="mdi-bell"
+        ></v-btn>
+      </v-badge>
     </div>
+
     <div class="profile-container">
       <div class="multitext-container">
-        <span class="profile-name" @click="click('url')">{{ profile.name }}</span>
+        <span class="profile-name" style="font-weight: bold;" @click="click('url')">{{ profile.username }}</span>
         <div class="profile-edit"  @click="click('url')">
-          <font-awesome-icon class="icon" icon="pencil" /> Account
+          <v-icon icon="mdi-account-edit" class="icon"></v-icon> Account
         </div>
       </div>
-      <img src="/assets/zThundy.png"  @click="click('pic')" />
+      
+      <v-avatar style="border: 3px solid white;" image="/assets/zThundy.png" size="80"></v-avatar>
     </div>
   </div>
 </template>
@@ -22,9 +42,17 @@ export default {
   name: "dashboardHeader",
   inject: ["$profileAPI"],
   data() {
-    return {
-      profile: this.$profileAPI.getProfile(),
-    };
+    if (process.env.NODE_ENV === "development") {
+      return {
+        profile: {
+          username: "zThundy"
+        },
+      };
+    } else {
+      return {
+        profile: this.$profileAPI.getProfile(),
+      };
+    }
   },
 
   methods: {
@@ -64,7 +92,7 @@ export default {
 .info-container {
   height: 100%;
   width: 100%;
-  margin: 15px;
+  margin: auto;
 }
 
 /* size of container as fit-content + 10px */
@@ -93,31 +121,13 @@ export default {
   height: 100%;
   width: 100%;
   text-align: right;
-  margin: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-right: 10px;
   flex-basis: content;
 }
 
-.profile-container img {
-  transition: all 0.1s ease-in-out;
-  object-fit: cover;
-  width: 70px;
-  height: 70px;
-  border-radius: 15px;
-  border: 3px solid white;
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-right: 40px;
-  cursor: pointer;
-  box-shadow: 0 0 2px 0 rgb(255, 255, 255);
-}
-
-.profile-container img:hover {
-  transition: all 0.1s ease-in-out;
-  box-shadow: 0 0 10px 0 rgb(255, 255, 255);
-}
-
 .multitext-container {
-  transition: all 0.1s ease-in-out;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -130,18 +140,16 @@ export default {
 }
 
 .profile-name:hover {
-  transition: all 0.1s ease-in-out;
   text-decoration: underline;
   color: white;
 }
 
 .profile-edit {
   font-size: 0.8em;
-  transition: all 0.1s ease-in-out;
+  width: 100px;
 }
 
 .profile-edit:hover {
-  transition: all 0.1s ease-in-out;
   text-decoration: underline;
   color: white;
 }

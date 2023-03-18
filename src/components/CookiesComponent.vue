@@ -1,19 +1,40 @@
 <template>
-  <div class="container" :class="accepted ? 'slide-down' : 'slide-up'">
-    <font-awesome-icon icon="fa-solid fa-cookie-bite" class="icon" />
+  <v-sheet
+    class="container"
+    :class="accepted ? 'slide-down' : 'slide-up'"
+    :width="400"
+  >
+    <v-icon style="font-size: 5em" class="icon" icon="mdi-cookie"></v-icon>
 
-    <div class="text-container">
+    <p class="mb-8">
       This website uses cookies to ensure you get the best experience on our
       website. Please accept our cookie policy to continue using our website. To
-      learn more about our cookie policy, please visit this
+      learn more about our cookie policy, please this
       <router-link to="/cookies">page</router-link>.
-    </div>
+    </p>
 
-    <div class="button-container">
-      <v-btn style="margin: auto;" color="success" @click="acceptCookies"><v-icon style="margin-right: 10px" icon="mdi-check-circle" />Accept</v-btn>
-      <v-btn style="margin: auto;" color="red" @click="declineCookies"><v-icon style="margin-right: 10px" icon="mdi-close-circle" />Decline</v-btn>
-    </div>
-  </div>
+    <v-btn
+      block
+      class="text-none mb-4"
+      color="purple"
+      size="x-large"
+      variant="flat"
+      @click="action(true)"
+    >
+      Accept
+    </v-btn>
+
+    <v-btn
+      block
+      class="text-none"
+      color="purple"
+      size="x-large"
+      variant="outlined"
+      @click="action(true)"
+    >
+      Decline
+    </v-btn>
+  </v-sheet>
 </template>
 
 <script>
@@ -22,19 +43,15 @@ export default {
     return {
       // cookiePolicy: this.$cookies.get('cookie-policy'),
       /* if in dev mode then accepted: true */
-      // accepted: process.env.NODE_ENV === "development" ? true : false
-      accepted: false
+      accepted: process.env.NODE_ENV === "development" ? true : false
+      // accepted: false
     };
   },
 
   methods: {
-    acceptCookies() {
+    action(b) {
       // this.$cookies.set('cookie-policy', 'accepted', '1Y');
-      this.accepted = true;
-    },
-    declineCookies() {
-      // this.$cookies.set('cookie-policy', 'declined', '1Y');
-      this.accepted = true;
+      this.accepted = b;
     },
   },
 
@@ -48,17 +65,12 @@ export default {
   position: fixed;
   bottom: -300px;
   right: 10px;
-  color: black;
   z-index: 1;
 
   height: auto;
   width: 400px;
-  /* make container transparent */
-  background-color: rgb(255, 255, 255);
   /* make container not selectable */
   user-select: none;
-  /* make container rounded */
-  border-radius: 10px;
   /* add black shadow behind */
   box-shadow: 0 0 10px 0 rgb(0, 0, 0);
   padding: 15px 10px 10px 15px;
@@ -67,13 +79,17 @@ export default {
 }
 
 .slide-up {
-  animation: slideUp 1s ease-in-out;
+  animation: slideUp .3s ease-in-out;
   animation-fill-mode: forwards;
 }
 
 /* make keyframes to slide container up */
 @keyframes slideUp {
   0% {
+    bottom: -300px;
+    opacity: 0;
+  }
+  40% {
     bottom: -300px;
     opacity: 0;
   }
@@ -84,7 +100,7 @@ export default {
 }
 
 .slide-down {
-  animation: slideDown 1s ease-in-out;
+  animation: slideDown .3s ease-in-out;
   animation-fill-mode: forwards;
 }
 
@@ -105,23 +121,5 @@ export default {
   text-align: center;
   font-size: 3em;
   margin-bottom: 10px;
-}
-
-.text-container {
-  width: 100%;
-  height: auto;
-  font-size: 1em;
-  color: rgb(0, 0, 0);
-}
-
-.button-container {
-  justify-content: center;
-  width: 100%;
-  height: auto;
-  display: flex;
-  flex-direction: row;
-  margin-top: 10px;
-  height: 5vh;
-  margin-top: 2vh;
 }
 </style>

@@ -3,20 +3,32 @@ if (process.env.NODE_ENV === "development" && true) {
   sounds = [
     {
       id: "b22bbdf0-8d82-41c1-b7d2-5e93ad632c27",
-      path: "C:/Users/username/Music/sound1.mp3",
-      name: "Meme sound number one",
-      description: "This is a description for the sound",
-      volume: 30,
+      path: "/assets/sound-2.mp3",
+      name: "Click, nice",
+      description: "This is a description for the sound and this is the first sound i have in the list",
+      volume: 40,
       points: 80,
+      color: "#FF00FF",
       isPlaying: false,
     },
     {
       id: "67a92512-1237-4dd3-a63c-3d7a6c0d8f40",
-      path: "C:/Users/username/Music/sound2.mp3",
-      name: "Emotional damage",
+      path: "/assets/sound-1.mp3",
+      name: "Alottadamage",
       description: "This is a description for the sound",
       volume: 70,
       points: 100,
+      color: "#0000FF",
+      isPlaying: false,
+    },
+    {
+      id: "67a92512-1237-4dd3-a63c-3d7a630d8f40",
+      path: "C:/Users/username/Music/sound3.mp3",
+      name: "New sound cool",
+      description: "This is a description for the sound and this is long to see how this affects the list object",
+      volume: 10,
+      points: 200,
+      color: "#FF0000",
       isPlaying: false,
     },
     // {
@@ -87,12 +99,13 @@ if (process.env.NODE_ENV === "development" && true) {
   sounds = null;
 }
 
-export async function getCachedSounds() {
-  if (sounds) {
-    return sounds;
-  }
-  await _getSounds();
-  return sounds;
+export function getCachedSounds() {
+  return new Promise((resolve, reject) => {
+    if (sounds) resolve(sounds);
+    _getSounds()
+      .then(sounds => resolve(sounds))
+      .catch(e => reject(e));
+  })
 }
 
 async function _getSounds() {

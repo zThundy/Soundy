@@ -6,5 +6,6 @@ const { app, router } = createApp()
 router.isReady().then(() => {
   app.mount('#app');
 
-  console.log('hydrated')
+  console.log(app);
+  console.log('hydrated');
 })

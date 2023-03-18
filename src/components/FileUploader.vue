@@ -2,7 +2,7 @@
   <div class="uploader">
     <div class="close-button-container">
       <button @click.prevent="cancel" class="close-button">
-        <font-awesome-icon icon="xmark" />
+        <v-icon icon="mdi-window-close"></v-icon>
       </button>
     </div>
 
@@ -14,8 +14,8 @@
       <label for="file-input" class="file-input-label">
         <span v-if="dropZoneActive">
           <span>
-            <font-awesome-icon v-if="computeIcon() !== 'spinner'" :icon="computeIcon()" />
-            <font-awesome-icon v-else :icon="computeIcon()" spin />
+            <v-progress-circular v-if="computeIcon() === 'spinner'" indeterminate></v-progress-circular>
+            <v-icon v-else :icon="'mdi-' + computeIcon()"></v-icon>
           </span>
           <span class="smaller">
             Release <em><b style="font-size: 1.5em;">here</b></em> to upload the file
@@ -23,8 +23,8 @@
         </span>
         <span v-else>
           <span>
-            <font-awesome-icon v-if="computeIcon() !== 'spinner'" :icon="computeIcon()" />
-            <font-awesome-icon v-else :icon="computeIcon()" spin />
+            <v-progress-circular v-if="computeIcon() === 'spinner'" indeterminate></v-progress-circular>
+            <v-icon v-else :icon="'mdi-' + computeIcon()"></v-icon>
           </span>
           <span class="smaller">
             <em><b style="font-size: 1.5em;">Drag</b></em> your audio files here or <em><b style="font-size: 1.5em;">click</b></em> to upload
@@ -106,11 +106,11 @@ export default {
       return name;
     },
     computeIcon() {
-      if (!file.value.name) return "arrow-up-from-bracket";
-      if (file.value.status === "ready") return "circle-minus";
+      if (!file.value.name) return "cloud-upload";
+      if (file.value.status === "ready") return "minus-circle";
       if (file.value.status === "loading") return "spinner";
-      if (file.value.status === "success") return "circle-check";
-      if (file.value.status === "error") return "circle-xmark";
+      if (file.value.status === "success") return "checkbox-marked-circle";
+      if (file.value.status === "error") return "close-circle";
     },
     uploadClick(e) {
       if (!file.value.name) {
@@ -121,7 +121,8 @@ export default {
         });
       }
       e.srcElement.disabled = true;
-      const userId = this.$profileAPI.getUserId();
+      // const userId = this.$profileAPI.getUserId();
+      const userId = "dsds"
       this.uploadFile(this.file, userId);
     },
   },

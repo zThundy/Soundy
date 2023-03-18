@@ -21,7 +21,7 @@ export default function () {
     // track status and upload file
     file.status = "loading";
     let response = await fetch(url, { method: "POST", body: formData });
-    // change status to indicate the success of the upload request
+    // // change status to indicate the success of the upload request
     file.status = response.ok ? "success" : "error";
     console.log(response);
     return response;

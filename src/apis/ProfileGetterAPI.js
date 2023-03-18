@@ -8,20 +8,20 @@ class ProfileAPI {
     } else {
     }
 
-    if (import.meta.env.SSR) {
-      const appStore = useAppStore();
-      appStore.test = "testing value";
-      console.log(appStore);
+    // if (import.meta.env.SSR) {
+    //   const appStore = useAppStore();
+    //   appStore.test = "testing value";
+    //   console.log(appStore);
 
-      if (!String.prototype.format) {
-        String.prototype.format = function() {
-          var args = arguments;
-          return this.replace(/{(\d+)}/g, function(match, number) {
-            return typeof args[number] != 'undefined' ? args[number] : match;
-          });
-        };
-      }
-    }
+    //   if (!String.prototype.format) {
+    //     String.prototype.format = function() {
+    //       var args = arguments;
+    //       return this.replace(/{(\d+)}/g, function(match, number) {
+    //         return typeof args[number] != 'undefined' ? args[number] : match;
+    //       });
+    //     };
+    //   }
+    // }
   }
 
   async _initServer() {

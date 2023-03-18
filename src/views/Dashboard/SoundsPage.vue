@@ -1,17 +1,24 @@
 <template>
-  <div class="bg" v-if="sounds && typeof sounds === 'object'">
-    <div class="sounds-list" v-if="sounds.length > 0">
-      <div
-        v-for="sound of sounds"
-        v-bind:key="sound.id"
-        @click="selectSound(sound)"
+  <div class="bg" v-if="sounds.length > 0">
+    <v-list class="sounds-list" lines="three">
+      <v-list-item
+        v-for="(sound, i) in sounds"
+        :key="i"
+        :title="(sound.changed ? '* ' + sound.name : sound.name) || 'No name provided'"
+        :subtitle="sound.description || 'No description provided'"
+        :value="sound.id"
         class="sound"
-        :class="{ 'sound-selected': sound.id === (selectedSound ? selectedSound.id : '') }"
+        active-color="primary"
+        @click="select(sound, i)"
       >
-        <span class="title">{{ sound.name || "No name" }}</span>
-        <!-- <span class="description"><font-awesome-icon class="icon" icon="paperclip" />{{ sound.description }}</span> -->
-      </div>
-    </div>
+      <template v-slot:append>
+        <v-icon
+          icon="mdi-movie-open-edit"
+        ></v-icon>
+      </template>
+      </v-list-item>
+    </v-list>
+
     <div class="sounds-info">
       <div
         v-if="selectedSound"
@@ -28,7 +35,7 @@
             clearable
             variant="solo"
           ></v-text-field>
-          <v-spacer></v-spacer>
+
           <v-textarea
             label="Sound Description"
             v-model="selectedSound.description"
@@ -36,7 +43,7 @@
             :counter="80"
             variant="solo"
           ></v-textarea>
-          <v-spacer></v-spacer>
+
           <v-text-field
             label="Points needed"
             v-model="selectedSound.points"
@@ -45,68 +52,97 @@
           ></v-text-field>
         </div>
 
+        <div class="color-picker-container">
+          <v-color-picker
+            class="ma-2"
+            v-model="selectedSound.color"
+            :modes="['rgb']"
+          ></v-color-picker>
+        </div>
+
+        <v-divider style="margin-top: 30px; margin-bottom: 30px; width: 90%; margin-left: auto; margin-right: auto;" :thickness="2"></v-divider>
+
         <div class="slider-container">
           <v-slider
-            thumb-color="purple"
+            :thumb-color="selectedSound.color"
             label="Volume"
             v-model="selectedSound.volume"
             :min="1"
             :max="100"
+            thumb-label
+            step="1"
           ></v-slider>
         </div>
 
+        <div class="audio-player-container">
+          <AudioPlayer
+            :file="selectedSound.path"
+            :volume="selectedSound.volume / 100"
+          ></AudioPlayer>
+        </div>
+
+        <v-divider style="margin-top: 30px; margin-bottom: 30px; width: 90%; margin-left: auto; margin-right: auto;" :thickness="2"></v-divider>
+
         <div class="buttons-container">
-          <v-btn @click="saveSound(selectedSound)"><v-icon class="icon" icon="mdi-floppy" />Save</v-btn>
-          <v-btn @click="deleteSound(selectedSound)"><v-icon class="icon" icon="mdi-delete" />Delete</v-btn>
+          <v-btn
+            style="margin-left: 40px; margin-right: 40px;"
+            @click="saveSound(selectedSound)"
+            :color="selectedSound.color"
+            prepend-icon="mdi-floppy"
+            size="large"
+          >Save</v-btn>
+
+          <v-btn
+            style="margin-left: 40px; margin-right: 40px;"
+            @click="deleteSound(selectedSound)"
+            prepend-icon="mdi-delete"
+            color="red"
+            size="large"
+          >Delete</v-btn>
         </div>
       </div>
 
       <div
         v-else
         class="sound-infoes-container"
-        style="margin: auto; width: 65%"
+        style="margin: auto; width: 95%"
       >
         <div style="text-align: center" v-if="sounds.length > 0">
           Select a sound
         </div>
-        <div class="no-sounds-container" v-else>
-          <span
-            >No sounds to show
-            <font-awesome-icon class="icon" icon="face-frown"
-          /></span>
-          <div class="upload-button" @click="activateUploader()">
-            <span
-              ><font-awesome-icon class="icon" icon="plus" /> Upload one</span
-            >
-          </div>
-        </div>
       </div>
     </div>
+  </div>
+  <div style="text-align: center; margin-top: 30px; margin-bottom: 30px;" v-else>
+    <v-progress-circular indeterminate :size="70" :width="5" color="rgb(247, 92, 255)"></v-progress-circular>
   </div>
 </template>
 
 <script>
 import { getCachedSounds } from "./../../apis/SoundsGetterAPI.js";
+import AudioPlayer from "../../components/AudioPlayer.vue";
 
 export default {
+  components: { AudioPlayer },
   name: "SoundsPage",
   inject: ["$emitter"],
-  async setup() {
-    return {
-      sounds: await getCachedSounds(),
-    };
+  // async setup() {
+  //   var sounds = await getCachedSounds()
+  //   for (var i in sounds) sounds.index = i;
+  //   return { sounds, selectedSound: null };
+  // },
+
+  data() {
+    return { sounds: [], selectedSound: null };
   },
 
-  data: () => ({
-    selectedSound: null
-  }),
-
   methods: {
-    selectSound(sound) {
+    select(sound, index) {
       if (this.selectedSound !== null && sound.id === this.selectedSound.id) {
         this.selectedSound = null;
         return;
       }
+      sound.index = index;
       this.selectedSound = sound;
     },
     saveSound(sound) {
@@ -114,22 +150,18 @@ export default {
       this.$emitter.emit("notif", {
         message: 'Sound "' + sound.name + '" saved!',
         type: "success",
-        time: 500,
       });
+      // this.sounds.set(this.sounds, sound.index, sound);
+      this.sounds.splice(sound.index, 1, sound);
+      // if (this.sounds[i].id === sound.id) this.sounds[i] = sound;
     },
     deleteSound(sound) {
-      for (var i in this.sounds) {
-        if (this.sounds[i].id === sound.id) {
-          this.sounds.splice(i, 1);
-          break;
-        }
-      }
+      this.sounds.splice(sound.index, 1);
       this.selectedSound = null;
       // TODO: Delete sound
       this.$emitter.emit("notif", {
         message: 'Sound "' + sound.name + '" deleted!',
         type: "success",
-        time: 500,
       });
     },
     activateUploader() {
@@ -138,11 +170,34 @@ export default {
     reload() {
       window.location.reload();
     },
+    playSound(sound) {
+      console.log("playing")
+      console.log(sound)
+    }
   },
 
-  watch: {},
+  watch: {
+    'selectedSound.name'(newValue) {
+      if (this.selectedSound)
+        if (this.sounds[this.selectedSound.index].name !== newValue) {
+          this.sounds[this.selectedSound.index].changed = true;
+        }
+    }
+  },
 
   computed: {},
+
+  mounted() {
+    getCachedSounds()
+      .then(sounds => {
+        for (var i in sounds) {
+          sounds[i].index = i
+          sounds[i].changed = false;
+          sounds[i].playing = false;
+        };
+        this.sounds = sounds;
+      });
+  }
 };
 </script>
 
@@ -156,17 +211,13 @@ export default {
   border-radius: 10px;
 }
 
-.label {
-  margin-top: 10px;
-  color: rgb(247, 92, 255);
-}
-
 .bg {
   display: flex;
   flex-direction: row;
   height: 95%;
   width: 95%;
   margin-top: 55px;
+  margin-bottom: 55px;
   margin-left: auto;
   margin-right: auto;
   background-color: rgb(107, 107, 107);
@@ -178,6 +229,7 @@ export default {
   height: 100%;
   margin-left: auto;
   margin-right: auto;
+  background-color: rgba(0, 0, 0, 0);
 }
 
 .sounds-info {
@@ -192,17 +244,12 @@ export default {
 
 .sound {
   user-select: none;
-  display: flex;
-  flex-direction: column;
   margin: auto;
-  margin-top: 10px;
+  margin-top: 5px;
   margin-bottom: 10px;
-  /* margin-left: 10px; */
   transition: all 0.1s ease-in-out;
   border-radius: 10px;
-  cursor: pointer;
   background-color: #333333;
-  padding: 10px;
   max-width: 95%;
   min-width: 95%;
 }
@@ -217,43 +264,32 @@ export default {
   padding: 10px;
 }
 
-.sound:hover {
-  transition: all 0.1s ease-in-out;
-  background-color: #555555;
+.color-picker-container {
+  margin: auto;
+  width: 95%;
 }
 
-.title {
-  font-size: 1.2em;
-}
-
-.description {
-  font-size: 0.8em;
-}
-
-.sound-selected {
-  box-shadow: 0 0 15px 0 rgb(255, 255, 255);
-  /* border: 1px rgba(255, 255, 255, 0.2) solid; */
-  background-color: rgba(87, 87, 87, 1);
+.audio-player-container {
+  margin: auto;
+  width: 95%;
 }
 
 .buttons-container {
   display: flex;
   flex-direction: row;
-  height: auto;
-  width: 92%;
+  width: 90%;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 30px;
   margin-bottom: 30px;
-  border-radius: 10px;
-  padding: 10px 15px 10px 10px;
+  justify-content: center;
 }
 
 .slider-container {
   justify-content: center;
   align-content: center;
   text-align: center;
-  margin-top: 80px;
+  margin: auto;
+  width: 95%;
 }
 
 .no-sounds-container {

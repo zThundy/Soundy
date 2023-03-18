@@ -11,12 +11,12 @@ export default {
 </script>
 
 <template>
-  <div class="app-container">
+  <v-app style="flex-direction: column;" class="app-container">
     <Notification />
     <Cookies />
 
     <RouterView />
-  </div>
+  </v-app>
 </template>
 
 <style scoped>
@@ -24,5 +24,6 @@ export default {
   height: 100vh;
   width: 100%;
   block-size: auto;
+  background-color: rgba(0, 0, 0, 0);
 }
 </style>

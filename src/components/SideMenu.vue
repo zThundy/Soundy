@@ -13,7 +13,7 @@
         :class="{ selected: element.selected }"
         :style="[element.color ? { color: element.color } : {}]"
       >
-        <font-awesome-icon :icon="element.icon" />
+        <v-icon :icon="'mdi-' + element.icon"></v-icon>
         <span :class="{ collapsed: collapsed }">{{ element.text }}</span>
       </div>
     </div>
@@ -26,7 +26,7 @@
         @click="execute(element)"
         :style="[element.color ? { color: element.color } : {}]"
       >
-        <font-awesome-icon :icon="element.icon" />
+        <v-icon :icon="'mdi-' + element.icon"></v-icon>
         <span :class="{ collapsed: collapsed }">{{ element.text }}</span>
       </div>
     </div>
@@ -42,13 +42,13 @@
         ]"
       >
         <a href="https://github.com/zthundy" target="_blank">
-          <font-awesome-icon icon="fa-brands fa-github" />
+          <v-icon icon="mdi-github"></v-icon>
         </a>
         <a href="https://twitch.tv/zthundy__" target="_blank">
-          <font-awesome-icon icon="fa-brands fa-twitch" />
+          <v-icon icon="mdi-twitch"></v-icon>
         </a>
         <a href="https://twitter.com/zthundy__" target="_blank">
-          <font-awesome-icon icon="fa-brands fa-twitter" />
+          <v-icon icon="mdi-twitter"></v-icon>
         </a>
       </div>
     </div>
@@ -89,11 +89,11 @@ export default {
       elementsTop,
       elementsBottom: [
         {
-          icon: "arrow-left",
+          icon: "arrow-collapse-left",
           text: "Collapse",
         },
         {
-          icon: "right-from-bracket",
+          icon: "logout",
           text: "Log out",
           color: "rgb(255, 0, 0)",
         },
@@ -127,8 +127,8 @@ export default {
       } else {
         this.collapsed = false;
       }
-      if (this.collapsed) this.elementsBottom[0].icon = "arrow-right";
-      else this.elementsBottom[0].icon = "arrow-left";
+      if (this.collapsed) this.elementsBottom[0].icon = "arrow-collapse-right";
+      else this.elementsBottom[0].icon = "arrow-collapse-left";
     },
     changeSelected() {
       // change selected element
@@ -148,8 +148,8 @@ export default {
       if (element.text === "Collapse") {
         this.collapsed = !this.collapsed;
         // rotate by 180deg the arrow
-        if (this.collapsed) element.icon = "arrow-right";
-        else element.icon = "arrow-left";
+        if (this.collapsed) element.icon = "arrow-collapse-right";
+        else element.icon = "arrow-collapse-left";
       } else if (element.text === "Log out") {
         console.log("logged out")
         this.$router.push("/");
@@ -272,6 +272,7 @@ img {
   margin: auto;
   color: rgb(168, 168, 168);
   font-size: 2em;
+  text-decoration: none;
 }
 
 /* make different bg colors on hover */

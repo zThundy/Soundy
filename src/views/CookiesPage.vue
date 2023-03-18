@@ -19,7 +19,7 @@ export default {
   <div class="container">
     <div class="back-text-container">
       <RouterLink class="back-text" to="/">
-        <font-awesome-icon icon="fa-solid fa-arrow-left" class="icon" />
+        <v-icon icon="mdi-arrow-left" class="icon"></v-icon>
         <span>Back to soundy</span>
       </RouterLink>
     </div>
@@ -228,7 +228,7 @@ export default {
       </ul>
     </div>
     <div ref="arrow" class="down-arrow show" @click="scrollToBottom">
-      <font-awesome-icon icon="arrow-down" />
+      <v-icon icon="mdi-arrow-down"></v-icon>
     </div>
   </div>
 </template>
@@ -346,12 +346,12 @@ export default {
 
 .back-text {
   transition: all 0.1s ease-in-out;
-  text-decoration: none;
   color: rgb(181, 101, 187);
   position: relative;
   top: 50%;
   font-weight: bold;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .back-text:hover {

@@ -1,10 +1,16 @@
 <template>
-  <div v-if="currentNotif.type && currentNotif.message" class="notif-container show">
-    <v-alert
-      :type="currentNotif.type || 'info'"
-      :title="currentNotif.title || null"
-      :text="currentNotif.text"
-    ></v-alert>
+  <div class="notifications-container">
+    <div v-for="notification of notif" :key="notification.id" class="notif-container">
+      <v-alert
+        :type="notification.type || 'info'"
+        :title="notification.title || null"
+        :text="notification.message"
+        closable
+        close-label="Close"
+        :al-id="notification.id"
+        @click:close="close(notification.id)"
+      ></v-alert>
+    </div>
   </div>
 </template>
 
@@ -25,34 +31,32 @@ export default {
         //   time: 10000
         // }
       ],
-      currentNotif: {},
+      playing: false
     };
   },
 
   methods: {
     addNotif(data) {
+      data.id = this.notif.length + 1;
       if (!data.type || !data.message) return;
       if (!data.time) data.time = 5000;
       this.notif.push(data);
-      if (!this.currentNotif.message) this.cycleNotif();
+      console.log(data);
+      console.log(this.notif.length)
+      if (!this.playing) this.cycleNotif(data)
     },
-    cycleNotif() {
-      if (this.notif.length === 0) {
-        this.currentNotif = {};
-        return;
-      }
-      this.currentNotif = this.notif.shift();
-      return setTimeout(() => {
-        // remove class "show" from notification container
-        const ref = document.querySelector(".notif-container");
-        ref.classList.remove("show");
-        ref.classList.add("hide");
-        return setTimeout(() => {
-          this.currentNotif = {};
-          setTimeout(() => this.cycleNotif(), 100);
-        }, 100);
-      }, this.currentNotif.time);
+    cycleNotif(first) {
+      this.playing = true;
+      // this.notif.shift();
+      setTimeout(() => {
+        this.notif.shift();
+        if (this.notif.length === 0) return this.playing = false;
+        this.cycleNotif(this.notif[0])
+      }, first.time);
     },
+    close(id) {
+      this.notif = this.notif.filter((notif) => notif.id !== id);
+    }
   },
 
   mounted() {
@@ -62,11 +66,9 @@ export default {
 </script>
 
 <style scoped>
-.notif-container {
-  transition: all 0.1s ease-in-out;
-  /* make notification container a flexbox */
+.notifications-container {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   /* float notification in top right corner of screen */
   position: fixed;
 
@@ -75,11 +77,14 @@ export default {
   height: auto;
   padding: 10px 10px 15px 15px;
 
-  top: 10px;
   right: 10px;
   z-index: 99;
-  border-radius: 10px;
-  justify-content: center;
+}
+
+.notif-container {
+  width: 350px;
+  padding: 5px 10px 5px 10px;
+  right: 10px;
 }
 
 .show {

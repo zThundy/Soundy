@@ -7,16 +7,18 @@
     <div class="homepage-content-container">
       <HeaderComponent />
       <div class="page-container">
-        <Suspense>
+        <RouterView class="router-view" />
+        
+        <!-- <Suspense>
           <template #default>
             <RouterView class="router-view" />
           </template>
           <template #fallback>
             <div class="loading">
-              <font-awesome-icon class="icon" icon="spinner" spin />
+              <v-progress-circular indeterminate></v-progress-circular>
             </div>
           </template>
-        </Suspense>
+        </Suspense> -->
       </div>
     </div>
 

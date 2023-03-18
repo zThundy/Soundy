@@ -6,19 +6,33 @@ import express from 'express'
 
 const isTest = process.env.VITEST
 
-export async function createServer(root = process.cwd(), isProd = process.env.NODE_ENV === 'production', hmrPort) {
+export async function createServer(
+  root = process.cwd(),
+  isProd = process.env.NODE_ENV === 'production',
+  hmrPort,
+) {
   const __dirname = path.dirname(fileURLToPath(import.meta.url))
   const resolve = (p) => path.resolve(__dirname, p)
 
-  const indexProd = isProd ? fs.readFileSync(resolve('dist/client/index.html'), 'utf-8') : ''
-  const manifest = isProd ? JSON.parse(fs.readFileSync(resolve('dist/client/ssr-manifest.json'), 'utf-8')) : {}
+  const indexProd = isProd
+    ? fs.readFileSync(resolve('dist/client/index.html'), 'utf-8')
+    : ''
+
+  const manifest = isProd
+    ? JSON.parse(
+        fs.readFileSync(resolve('dist/client/ssr-manifest.json'), 'utf-8'),
+      )
+    : {}
 
   const app = express()
 
+  /**
+   * @type {import('vite').ViteDevServer}
+   */
   let vite
   if (!isProd) {
     vite = await (await import('vite')).createServer({
-      base: "/",
+      base: '/',
       root,
       logLevel: isTest ? 'error' : 'info',
       server: {
@@ -44,7 +58,8 @@ export async function createServer(root = process.cwd(), isProd = process.env.NO
 
   app.use('*', async (req, res) => {
     try {
-      const url = req.originalUrl.replace('/', '/')
+      // const url = req.originalUrl.replace('/', '/')
+      const url = req.originalUrl;
 
       let template, render
       if (!isProd) {

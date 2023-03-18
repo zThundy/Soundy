@@ -6,7 +6,7 @@
 
     <div id="form">
       <span class="welcome">Welcome to the most advanced and complete (not really) solution for implementing alerts, gifs and videos in your streams</span>
-      <button type="submit" class="twitch-button" v-on:click="login"><font-awesome-icon icon="fa-brands fa-twitch" /> Log In witch Twitch</button>
+      <button type="submit" class="twitch-button" v-on:click="login"><v-icon icon="mdi-twitch"></v-icon> Log In witch Twitch</button>
     </div>
   </div>
 </template>
