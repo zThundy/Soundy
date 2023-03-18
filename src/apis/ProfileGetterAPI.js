@@ -1,6 +1,6 @@
 import TwitchAPI from "./Twitch";
 // const twitch = import.meta.env.SSR ? new TwitchAPI() : null;
-import { useAppStore } from '../stores/appStore';
+// import { useAppStore } from '../stores/appStore';
 
 class ProfileAPI {
   constructor() {

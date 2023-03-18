@@ -1,5 +1,5 @@
 import { createPinia } from 'pinia'
-import { createSSRApp } from 'vue'
+import { createApp } from 'vue'
 import App from "./App.vue";
 import router from "./router/index.js";
 import ProfileAPI from "./apis/ProfileGetterAPI.js";
@@ -110,20 +110,17 @@ import "./assets/buttons.css";
 // //     library.add(Icons[icon]);
 // // }
 
-export function createApp() {
-  // const app = createSSRApp(App).component("font-awesome-icon", FontAwesomeIcon);
-  const app = createSSRApp(App);
-  // add vue router component
-  app.use(router);
-  // ad vuetify
-  app.use(vuetify);
-  // add pinia for store
-  const pinia = createPinia()
-  app.use(pinia)
-  // add profile API
-  app.provide("$profileAPI", ProfileAPI);
-  // add event emitter
-  app.provide("$emitter", emitter);
-  // return values
-  return { app, router }
-}
+// const app = createSSRApp(App).component("font-awesome-icon", FontAwesomeIcon);
+const app = createApp(App);
+// add vue router component
+app.use(router);
+// ad vuetify
+app.use(vuetify);
+// add pinia for store
+const pinia = createPinia()
+app.use(pinia)
+// add profile API
+app.provide("$profileAPI", ProfileAPI);
+// add event emitter
+app.provide("$emitter", emitter);
+app.mount("#app");

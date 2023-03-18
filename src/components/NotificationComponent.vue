@@ -1,15 +1,22 @@
 <template>
   <div class="notifications-container">
-    <div v-for="notification of notif" :key="notification.id" class="notif-container">
+    <div v-for="notification of notif" :key="notification.id" :id="'notif' + notification.id" class="notif-container show">
       <v-alert
         :type="notification.type || 'info'"
         :title="notification.title || null"
         :text="notification.message"
-        closable
-        close-label="Close"
         :al-id="notification.id"
-        @click:close="close(notification.id)"
-      ></v-alert>
+      >
+        <template v-slot:append>
+          <v-btn
+            size="x-small"
+            variant="text"
+            style="background-color: rgba(0, 0, 0, 0)"
+            icon="mdi-close"
+            @click="close(notification.id)"
+          ></v-btn>
+        </template>
+      </v-alert>
     </div>
   </div>
 </template>
@@ -41,13 +48,10 @@ export default {
       if (!data.type || !data.message) return;
       if (!data.time) data.time = 5000;
       this.notif.push(data);
-      console.log(data);
-      console.log(this.notif.length)
       if (!this.playing) this.cycleNotif(data)
     },
     cycleNotif(first) {
       this.playing = true;
-      // this.notif.shift();
       setTimeout(() => {
         this.notif.shift();
         if (this.notif.length === 0) return this.playing = false;
@@ -55,7 +59,12 @@ export default {
       }, first.time);
     },
     close(id) {
-      this.notif = this.notif.filter((notif) => notif.id !== id);
+      const notifDiv = document.getElementById("notif" + id);
+      if (notifDiv) {
+        notifDiv.classList.remove("show");
+        setTimeout(() => notifDiv.classList.add("hide"), 100);
+        setTimeout(() => { this.notif = this.notif.filter((notif) => notif.id !== id) }, 220);
+      }
     }
   },
 
@@ -90,53 +99,21 @@ export default {
 .show {
   animation: shiftLeft 0.1s ease-in-out;
   animation-fill-mode: forwards;
+  animation-direction: normal;
 }
 
 .hide {
-  animation: shiftRight 0.1s ease-in-out;
+  animation: shiftLeft 0.1s ease-in-out;
   animation-fill-mode: forwards;
+  animation-direction: reverse;
 }
 
 @keyframes shiftLeft {
   0% {
     right: -350px;
-    height: 0;
   }
   100% {
     right: 10px;
-    height: auto;
   }
-}
-
-@keyframes shiftRight {
-  0% {
-    right: 10px;
-    height: auto;
-  }
-  100% {
-    right: -350px;
-    height: 0;
-  }
-}
-
-#icon {
-  padding: 5px;
-  /* top: 5px; */
-  font-size: 1.5em;
-}
-
-.notif-container-text {
-  width: 90%;
-  margin-left: 10px;
-}
-
-.error {
-  color: white;
-  background-color: rgb(255, 78, 78);
-}
-
-.success {
-  color: white;
-  background-color: rgb(53, 158, 53);
 }
 </style>
